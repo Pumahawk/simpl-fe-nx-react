@@ -8,7 +8,9 @@ export interface PageLayoutProps {
     children: ReactNode;
 }
 
-export interface DeferredPageLayoutProps extends PageLayoutProps {
+export interface DeferredPageLayoutProps {
+    title?: string;
+    children: (data: any) => ReactNode;
     deferred?: string;
 }
 
@@ -39,9 +41,12 @@ export function DeferredPageLayout(props: DeferredPageLayoutProps) {
     return (
         <Suspense fallback={<LoadingPage/>}>
             <Await resolve={data[deferred]}>
-                <PageLayout {...props}>
-                    {props.children}
-                </PageLayout>
+                { data => (
+                        <PageLayout {...props}>
+                            {props.children(data)}
+                        </PageLayout>
+                    )
+                }
             </Await>
         </Suspense>
     )
