@@ -1,9 +1,9 @@
-import PageLayout from "../lib/component/page-layout-component";
+import { DeferredPageLayout } from "../lib/component/page-layout-component";
 
 export default function IdentityAttributePage() {
     return (
-        <PageLayout title="Identity attributes">
+        <DeferredPageLayout title="Identity attributes">
             <div>working...</div>
-        </PageLayout>
+        </DeferredPageLayout>
     )
 }

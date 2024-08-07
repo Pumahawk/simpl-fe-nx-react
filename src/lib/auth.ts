@@ -1,5 +1,5 @@
 import Keycloak from "keycloak-js";
-import { LoaderFunctionArgs } from "react-router-dom";
+import { defer, LoaderFunctionArgs } from "react-router-dom";
 
 export const keycloak = new Keycloak({
   url: window["env"]["KEYCLOAK_URL"],
@@ -16,6 +16,17 @@ export const initKeycloak = keycloak.init({
 export interface AuthConfig {
   authenticated?: boolean;
   roles?: string[];
+}
+
+export interface DeferredPageData {
+  [k: string]: any;
+}
+
+export async function authPage(args: LoaderFunctionArgs, config: AuthConfig) {
+  const data: DeferredPageData = {
+    single: auth(args, config),
+  };
+  return defer(data);
 }
 
 export async function auth(

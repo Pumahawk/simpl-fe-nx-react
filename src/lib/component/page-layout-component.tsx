@@ -1,6 +1,18 @@
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
+import { LoadingPage } from "./loading-component";
+import { Await, useLoaderData } from "react-router-dom";
+import { DeferredPageData } from "../auth";
 
-export default function PageLayout({title, children}: {title?: string, children: ReactNode}) {
+export interface PageLayoutProps {
+    title?: string;
+    children: ReactNode;
+}
+
+export interface DeferredPageLayoutProps extends PageLayoutProps {
+    deferred?: string;
+}
+
+export default function PageLayout({title, children}: PageLayoutProps) {
     return (
         <div className="d-flex justify-content-center align-items-center row min-vh-100">
             <div className="col-12 col-md-8">
@@ -18,5 +30,19 @@ export default function PageLayout({title, children}: {title?: string, children:
                 </div>
             </div>
         </div>
+    )
+}
+
+export function DeferredPageLayout(props: DeferredPageLayoutProps) {
+    const {deferred = "single"} = props; 
+    const data = useLoaderData() as DeferredPageData;
+    return (
+        <Suspense fallback={<LoadingPage/>}>
+            <Await resolve={data[deferred]}>
+                <PageLayout {...props}>
+                    {props.children}
+                </PageLayout>
+            </Await>
+        </Suspense>
     )
 }
