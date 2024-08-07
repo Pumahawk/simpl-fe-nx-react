@@ -9,20 +9,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StrictMode>
-    <KeycloakInit>
-      <RouterProvider router={router} fallbackElement={<LoadingPage/>}/>
-    </KeycloakInit>
+    <RouterProvider router={router} fallbackElement={<LoadingPage/>}/>
   </StrictMode>
 );
-
-function KeycloakInit({children}: {children: ReactNode}) {
-  const [status, setStatus] = useState<"load" | "end">("load");
-  initKeycloak.then(() => setStatus("end"));
-
-  switch(status) {
-      case "load":
-          return <LoadingPage/>;
-      case "end":
-          return children;
-  }
-}
