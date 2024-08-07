@@ -2,9 +2,8 @@ import { ReactNode, StrictMode, useState } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import router from "./router";
-import Loading from './lib/component/loading-component';
-import { KeycloakApp } from './lib/auth';
-
+import Loading, { LoadingPage } from './lib/component/loading-component';
+import { initKeycloak } from './lib/auth';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -18,11 +17,11 @@ root.render(
 
 function KeycloakInit({children}: {children: ReactNode}) {
   const [status, setStatus] = useState<"load" | "end">("load");
-  KeycloakApp.initPromise.then(() => setStatus("end"));
+  initKeycloak.then(() => setStatus("end"));
 
   switch(status) {
       case "load":
-          return <Loading/>;
+          return <LoadingPage/>;
       case "end":
           return children;
   }

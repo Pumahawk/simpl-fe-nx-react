@@ -1,18 +1,11 @@
-import Keycloak, { KeycloakInitOptions } from "keycloak-js";
+import Keycloak from "keycloak-js";
 
-export class KeycloakApp {
-  static client;
-  static initPromise;
+export const keycloak = new Keycloak({
+  url: window["env"]["KEYCLOAK_URL"],
+  realm: window["env"]["KEYCLOAK_REALM"],
+  clientId: window["env"]["KEYCLOAK_CLIENT_ID"],
+});
 
-  static {
-    this.client = new Keycloak({
-      url: window["env"]["KEYCLOAK_URL"],
-      realm: window["env"]["KEYCLOAK_REALM"],
-      clientId: window["env"]["KEYCLOAK_CLIENT_ID"],
-    });
-
-    this.initPromise = this.client.init({
-      onLoad: "check-sso",
-    });
-  }
-}
+export const initKeycloak = keycloak.init({
+  onLoad: "check-sso",
+});

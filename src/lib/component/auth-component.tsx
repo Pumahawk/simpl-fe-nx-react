@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
-import { KeycloakApp } from "../auth";
-import Loading from "./loading-component";
+import { keycloak } from "../auth";
+import { LoadingPage } from "./loading-component";
 import UnauthorizedPage from "../../pages/unauthorized-page";
 
 export interface AuthConfig {
@@ -26,16 +26,16 @@ export default function AuthKeycloak({children, authenticated = false, roles = [
 
 
     if (status === "load" && (authenticated || roles?.length)) {
-        if (KeycloakApp.client.authenticated) {
-            setStatus(roles?.length ? (roles.some(r => KeycloakApp.client.hasRealmRole(r)) ? "ok" : "unauthorized") : "ok");
+        if (keycloak.authenticated) {
+            setStatus(roles?.length ? (roles.some(r => keycloak.hasRealmRole(r)) ? "ok" : "unauthorized") : "ok");
         } else {
-            KeycloakApp.client.login();
+            keycloak.login();
         }
     }
 
     switch(status) {
         case "load":
-            return <Loading/>;
+            return <LoadingPage/>;
         case "ok":
             return children;
         case "unauthorized":
