@@ -12,7 +12,7 @@ export default createBrowserRouter([
     {
         path: "/identity-attributes",
         element: <IdentityAttributePage/>,
-        loader: auth({
+        loader: args => auth(args, {
             authenticated: true,
         })
     },

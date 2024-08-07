@@ -1,5 +1,5 @@
 import Keycloak from "keycloak-js";
-import { LoaderFunction } from "react-router-dom";
+import { LoaderFunctionArgs } from "react-router-dom";
 
 export const keycloak = new Keycloak({
   url: window["env"]["KEYCLOAK_URL"],
@@ -13,34 +13,34 @@ export const initKeycloak = keycloak.init({
     window.location.origin + "/assets/silent-check-sso.html",
 });
 
-export interface AuthConfig<T> {
+export interface AuthConfig {
   authenticated?: boolean;
   roles?: string[];
-  loader?: LoaderFunction<T>;
 }
 
-export function auth<T>(config: AuthConfig<T>): LoaderFunction<T> | undefined {
+export async function auth(
+  args: LoaderFunctionArgs,
+  config: AuthConfig
+): Promise<"authenticated" | "no-authenticated"> {
   if (config.authenticated || config.roles?.length) {
-    return (args, handlerCtx) =>
-      initKeycloak.then(() => {
-        const loader = config.loader ?? (() => null);
-        if (keycloak.authenticated) {
-          if (config.roles?.length) {
-            if (config.roles.some((r) => keycloak.hasRealmRole(r))) {
-              return Promise.resolve(loader(args, handlerCtx));
-            } else {
-              throw new Response("Unauthorized", { status: 401 });
-            }
-          } else {
-            return Promise.resolve(loader(args, handlerCtx));
-          }
+    await initKeycloak;
+    if (keycloak.authenticated) {
+      if (config.roles?.length) {
+        if (config.roles.some((r) => keycloak.hasRealmRole(r))) {
+          return "authenticated";
         } else {
-          return new Promise(() =>
-            keycloak.login({
-              redirectUri: args.request.url,
-            })
-          );
+          throw new Response("Unauthorized", { status: 401 });
         }
+      } else {
+        return "authenticated";
+      }
+    } else {
+      await keycloak.login({
+        redirectUri: args.request.url,
       });
+      return "authenticated";
+    }
+  } else {
+    return "no-authenticated";
   }
 }
