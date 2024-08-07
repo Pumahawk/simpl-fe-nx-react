@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import HomePage from "./pages/home-page";
 import IdentityAttributePage from "./pages/identity-attribute-page";
 import ParticipantTypesPage from "./pages/participant-types-page";
-import { auth } from "./lib/component/auth-component";
+import { auth } from "./lib/auth";
 
 export default createBrowserRouter([
     {
@@ -11,7 +11,8 @@ export default createBrowserRouter([
     },
     {
         path: "/identity-attributes",
-        element: auth(<IdentityAttributePage/>, {
+        element: <IdentityAttributePage/>,
+        loader: auth({
             authenticated: true,
         })
     },
