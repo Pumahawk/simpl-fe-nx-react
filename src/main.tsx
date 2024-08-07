@@ -2,7 +2,7 @@ import { ReactNode, StrictMode, useState } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import router from "./router";
-import Loading, { LoadingPage } from './lib/component/loading-component';
+import { LoadingPage } from './lib/component/loading-component';
 import { initKeycloak } from './lib/auth';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <StrictMode>
     <KeycloakInit>
-      <RouterProvider router={router} fallbackElement={<Loading/>}/>
+      <RouterProvider router={router} fallbackElement={<LoadingPage/>}/>
     </KeycloakInit>
   </StrictMode>
 );
