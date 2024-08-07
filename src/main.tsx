@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { LoadingPage } from './lib/component/loading-component';
 import router from "./router";
+import "bootstrap/dist/js/bootstrap.js";
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

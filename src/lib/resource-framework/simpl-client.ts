@@ -27,7 +27,8 @@ export interface PagedModelIdentityAtttribute
   extends PagedModel<IdentityAttribute> {}
 
 export interface IdentityAttributeSearchParams {
-  id?: string;
+  page?: number;
+  size?: number;
 }
 const identityAttibuteClient = {
   search(
