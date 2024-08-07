@@ -31,16 +31,18 @@ export interface IdentityAttributeSearchParams {
   size?: number;
 }
 const identityAttibuteClient = {
-  search(
+  async search(
     params?: IdentityAttributeSearchParams
   ): Promise<PagedModelIdentityAtttribute> {
-    return initFetch<PagedModelIdentityAtttribute>(
-      url(URL_SAP_IA_SEARCH, params)
+    return (
+      await initFetch<PagedModelIdentityAtttribute>(
+        url(URL_SAP_IA_SEARCH, params)
+      )
     )();
   },
 
-  getById(id: string): Promise<IdentityAttribute> {
-    return initFetch<IdentityAttribute>(url(URL_SAP_IA_ID(id)))();
+  async getById(id: string): Promise<IdentityAttribute> {
+    return (await initFetch<IdentityAttribute>(url(URL_SAP_IA_ID(id))))();
   },
 };
 
@@ -57,11 +59,17 @@ function url(path: string, params?: { [k: string]: any }): string {
   return `${url}${qp}`;
 }
 
-export function initFetch<T>(
+function getToken(): Promise<string> {
+  return keycloak.isTokenExpired(5)
+    ? keycloak.updateToken().then(() => keycloak.token!)
+    : Promise.resolve(keycloak.token!);
+}
+
+export async function initFetch<T>(
   path: string,
   mapConfig?: (arg: RequestInit) => RequestInit
 ) {
-  const token = keycloak.token;
+  const token = await getToken();
   const config: RequestInit = {
     headers: {
       Authorization: `Bearer ${token}`,
