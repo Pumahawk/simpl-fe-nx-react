@@ -22,9 +22,13 @@ export interface DeferredPageData {
   [k: string]: any;
 }
 
-export async function authPage(args: LoaderFunctionArgs, config: AuthConfig) {
+export function authPage(
+  args: LoaderFunctionArgs,
+  config: AuthConfig,
+  dataFn: () => any
+) {
   const data: DeferredPageData = {
-    single: auth(args, config),
+    single: auth(args, config).then(() => dataFn(args)),
   };
   return defer(data);
 }

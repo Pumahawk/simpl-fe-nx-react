@@ -1,7 +1,8 @@
 import { keycloak } from "../auth";
 
 const URL_SAP_IA_SEARCH = "/private/sap-api/identity-attribute/search";
-const URL_SAP_IA_ID = (id: string) => `/identity-attribute/${id}`;
+const URL_SAP_IA_ID = (id: string) =>
+  `/private/sap-api/identity-attribute/${id}`;
 
 export interface PageMetadata {
   size: number;
@@ -35,6 +36,10 @@ const identityAttibuteClient = {
     return initFetch<PagedModelIdentityAtttribute>(
       url(URL_SAP_IA_SEARCH, params)
     )();
+  },
+
+  getById(id: string): Promise<IdentityAttribute> {
+    return initFetch<IdentityAttribute>(url(URL_SAP_IA_ID(id)))();
   },
 };
 

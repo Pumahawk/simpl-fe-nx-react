@@ -11,15 +11,11 @@ export default createBrowserRouter([
         element: <HomePage/>
     },
     {
-        path: "/identity-attributes",
+        path: "/identity-attributes/:id",
         element: <IdentityAttributePage/>,
-        loader: args => {
-            return defer({
-                single: auth(args, {
-                    authenticated: true,
-                }).then(() => SimplClient.sap.identityAttibute.search({}))
-            })
-        }
+        loader: args => authPage(args, {
+            authenticated: true,
+        }, () => SimplClient.sap.identityAttibute.getById(args.params.id as string)),
     },
     {
         path: "/participant-types",
