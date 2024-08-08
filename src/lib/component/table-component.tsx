@@ -33,3 +33,23 @@ export function PaginatedTable<T>({columns, rowClick, rows}: PaginatedTableProps
         </table>
     );
 }
+
+export interface NavBarProps {
+    page: number;
+    size: number;
+    onPageChange: (page: number) => void;
+    onSizeChange: (size: number) => void;
+    options: number[]
+}
+
+export function NavBar({page, size, options, onPageChange, onSizeChange}: NavBarProps) {
+    return (
+        <div>
+            <button className="btn btn-secondary me-2" onClick={() => onPageChange(page - 1)}>-</button>
+            <button className="btn btn-secondary me-2" onClick={() => onPageChange(page + 1)}>+</button>
+            <select onChange={(event) => onSizeChange(parseInt(event.target.value))} value={size}>
+                { options.map(opt => (<option value={opt}>{opt}</option>)) }
+            </select>
+        </div>
+    )
+}

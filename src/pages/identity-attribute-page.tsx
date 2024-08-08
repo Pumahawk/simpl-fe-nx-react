@@ -4,7 +4,7 @@ import { IdentityAttribute, SimplClient } from "../lib/resource-framework/simpl-
 import { LoadingRow } from "../lib/component/loading-component";
 import { useNavigate } from "react-router-dom";
 import { usePromiseComponent } from "../lib/custom-react";
-import { ColumnDefinition, PaginatedTable } from "../lib/component/table-component";
+import { ColumnDefinition, NavBar, PaginatedTable } from "../lib/component/table-component";
 
 const columns: ColumnDefinition<IdentityAttribute>[] = [
     {
@@ -38,13 +38,12 @@ export default function IdentityAttributePage() {
         <PageLayout title="Identity attributes">
             <Suspense fallback={<LoadingRow/>}>
                 <RowTableData/>
-                <button className="btn btn-secondary me-2" onClick={() => setPage(page - 1)}>-</button>
-                <button className="btn btn-secondary me-2" onClick={() => setPage(page + 1)}>+</button>
-                <select onChange={(event) => setSize(parseInt(event.target.value))}>
-                    <option value="10">10</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
+                <NavBar
+                    options={[10, 20, 50, 100]}
+                    onPageChange={setPage}
+                    onSizeChange={setSize}
+                    {...{size, page}}
+                />
             </Suspense>
         </PageLayout>
     )
