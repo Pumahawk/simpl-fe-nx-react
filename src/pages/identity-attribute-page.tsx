@@ -22,7 +22,8 @@ export default function IdentityAttributePage() {
         <PageLayout title="Identity attributes">
             <Suspense fallback={<LoadingRow/>}>
                 <RowTableData/>
-                <button onClick={() => setPage(page + 1)}></button>
+                <button className="btn btn-secondary" onClick={() => setPage(page - 1)}>-</button>
+                <button className="btn btn-secondary" onClick={() => setPage(page + 1)}>+</button>
             </Suspense>
         </PageLayout>
     )
