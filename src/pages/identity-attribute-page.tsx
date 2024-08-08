@@ -1,8 +1,9 @@
-import { lazy, ReactNode, Suspense, useCallback, useState } from "react";
+import { ReactNode, Suspense, useCallback, useState } from "react";
 import PageLayout from "../lib/component/page-layout-component";
 import { IdentityAttribute, SimplClient } from "../lib/resource-framework/simpl-client";
 import { LoadingRow } from "../lib/component/loading-component";
 import { useNavigate } from "react-router-dom";
+import { promiseComponent } from "../lib/custom-react";
 
 
 export default function IdentityAttributePage() {
@@ -49,8 +50,4 @@ function PaginatedTable({rows}: {rows: IdentityAttribute[]}): ReactNode {
             </tbody>
         </table>
     );
-}
-
-function promiseComponent<T>(promise: Promise<T>, component: (data: T) => ReactNode) {
-    return lazy(() => promise.then(data => ({default: () => component(data)})));
 }
