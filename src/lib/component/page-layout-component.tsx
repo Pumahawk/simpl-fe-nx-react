@@ -16,18 +16,20 @@ export interface DeferredPageLayoutProps {
 
 export default function PageLayout({title, children}: PageLayoutProps) {
     return (
-        <div className="d-flex no-gutters justify-content-center align-items-center min-vh-100">
-            <div className="col-12 col-md-8">
-                {
-                    title && (
-                        <div className="row  text-break">
-                            <h1 className="text-primary">{title}</h1>
+        <div className="container">
+            <div className="row justify-content-center align-items-center min-vh-100">
+                <div className="col">
+                    {
+                        title && (
+                            <div className="row  text-break">
+                                <h1 className="text-primary">{title}</h1>
+                            </div>
+                        )
+                    }
+                    <div className="row">
+                        <div className="col-12">
+                            {children}
                         </div>
-                    )
-                }
-                <div className="row">
-                    <div className="col-12">
-                        {children}
                     </div>
                 </div>
             </div>
