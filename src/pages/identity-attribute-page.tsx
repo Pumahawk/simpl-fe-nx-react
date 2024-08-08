@@ -2,11 +2,10 @@ import { lazy, ReactNode, Suspense, useCallback, useState } from "react";
 import PageLayout from "../lib/component/page-layout-component";
 import { IdentityAttribute, SimplClient } from "../lib/resource-framework/simpl-client";
 import { LoadingRow } from "../lib/component/loading-component";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 export default function IdentityAttributePage() {
-    const navigate = useNavigate();
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
 
@@ -15,7 +14,7 @@ export default function IdentityAttributePage() {
         size,
     }), [page, size]);
 
-    const RowTableData = promiseComponent(searchIA(), dataset => createTable(dataset.content, navigate));
+    const RowTableData = promiseComponent(searchIA(), dataset => <PaginatedTable rows={dataset.content}/>);
 
     return (
         <PageLayout title="Identity attributes">
@@ -33,7 +32,8 @@ export default function IdentityAttributePage() {
     )
 }
 
-function createTable(rows: IdentityAttribute[], navigate: NavigateFunction): ReactNode {
+function PaginatedTable({rows}: {rows: IdentityAttribute[]}): ReactNode {
+    const navigate = useNavigate();
     return (
         <table className="table table-hover">
             <tbody>
