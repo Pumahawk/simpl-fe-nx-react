@@ -1,7 +1,7 @@
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { lazy, ReactNode, Suspense, useCallback, useEffect, useState } from "react";
 import PageLayout from "../lib/component/page-layout-component";
 import { IdentityAttribute, PagedModelIdentityAtttribute, SimplClient } from "../lib/resource-framework/simpl-client";
-import Loading from "../lib/component/loading-component";
+import Loading, { LoadingRow } from "../lib/component/loading-component";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 
 
@@ -16,19 +16,14 @@ export default function IdentityAttributePage() {
         size,
     }), [page, size]);
 
-    useEffect(() => {
-        searchIA().then(data => setDataset(data))
-    }, [page, size, searchIA]);
+    const RowTableData = lazy(() => searchIA().then(dataset => ({default: () => createTable(dataset.content, navigate)})));
 
     return (
         <PageLayout title="Identity attributes">
-            {
-                !dataset
-                ? <Loading/>
-                : <div>
-                    { createTable(dataset.content, navigate) }
-                </div>
-            }
+            <Suspense fallback={<LoadingRow/>}>
+                <RowTableData/>
+                <button onClick={() => setPage(page + 1)}></button>
+            </Suspense>
         </PageLayout>
     )
 }

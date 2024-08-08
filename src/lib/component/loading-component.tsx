@@ -17,3 +17,11 @@ export function LoadingPage() {
       </PageLayout>
     );
 }
+
+export function LoadingRow() {
+  return (
+    <div className="text-center py-3">
+      <Loading/>
+    </div>
+  );
+}
