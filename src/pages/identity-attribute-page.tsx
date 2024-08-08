@@ -3,7 +3,7 @@ import PageLayout from "../lib/component/page-layout-component";
 import { IdentityAttribute, SimplClient } from "../lib/resource-framework/simpl-client";
 import { LoadingRow } from "../lib/component/loading-component";
 import { useNavigate } from "react-router-dom";
-import { promiseComponent } from "../lib/custom-react";
+import { promiseComponent, usePromiseComponent } from "../lib/custom-react";
 
 
 export default function IdentityAttributePage() {
@@ -15,7 +15,7 @@ export default function IdentityAttributePage() {
         size,
     }), [page, size]);
 
-    const RowTableData = promiseComponent(searchIA(), dataset => <PaginatedTable rows={dataset.content}/>);
+    const RowTableData = usePromiseComponent(searchIA(), dataset => <PaginatedTable rows={dataset.content}/>, [page, size]);
 
     return (
         <PageLayout title="Identity attributes">
