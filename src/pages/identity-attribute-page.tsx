@@ -1,12 +1,29 @@
-import { ReactNode, Suspense, useCallback, useState } from "react";
+import { Suspense, useCallback, useState } from "react";
 import PageLayout from "../lib/component/page-layout-component";
 import { IdentityAttribute, SimplClient } from "../lib/resource-framework/simpl-client";
 import { LoadingRow } from "../lib/component/loading-component";
 import { useNavigate } from "react-router-dom";
-import { promiseComponent, usePromiseComponent } from "../lib/custom-react";
+import { usePromiseComponent } from "../lib/custom-react";
+import { ColumnDefinition, PaginatedTable } from "../lib/component/table-component";
 
+const columns: ColumnDefinition<IdentityAttribute>[] = [
+    {
+        label: "ID",
+        mapper: ia => ia.id,
+    },
+    {
+        label: "CODE",
+        mapper: ia => ia.code,
+    },
+    {
+        label: "NAME",
+        mapper: ia => ia.name,
+    },
+];
 
 export default function IdentityAttributePage() {
+    const navigate = useNavigate();
+
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
 
@@ -15,7 +32,7 @@ export default function IdentityAttributePage() {
         size,
     }), [page, size]);
 
-    const RowTableData = usePromiseComponent(searchIA(), dataset => <PaginatedTable rows={dataset.content}/>, [page, size]);
+    const RowTableData = usePromiseComponent(searchIA(), dataset => <PaginatedTable<IdentityAttribute> rows={dataset.content} columns={columns} rowClick={(row) => navigate(row.id)}/>, [page, size]);
 
     return (
         <PageLayout title="Identity attributes">
@@ -33,21 +50,3 @@ export default function IdentityAttributePage() {
     )
 }
 
-function PaginatedTable({rows}: {rows: IdentityAttribute[]}): ReactNode {
-    const navigate = useNavigate();
-    return (
-        <table className="table table-hover">
-            <tbody>
-                { 
-                    rows.map((row, i) => (
-                        <tr key={i} onClick={() => navigate(row.id)}>
-                            <td>{row.id}</td>
-                            <td>{row.code}</td>
-                            <td>{row.name}</td>
-                        </tr>
-                    ))
-                }
-            </tbody>
-        </table>
-    );
-}
