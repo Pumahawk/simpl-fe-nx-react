@@ -41,7 +41,10 @@ export default function IdentityAttributePage() {
                 <NavBar
                     options={[10, 20, 50, 100]}
                     onPageChange={setPage}
-                    onSizeChange={setSize}
+                    onSizeChange={size => {
+                        setPage(0);
+                        setSize(size);
+                    }}
                     {...{size, page}}
                 />
             </Suspense>
