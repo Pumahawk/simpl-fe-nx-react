@@ -32,7 +32,7 @@ export default function IdentityAttributePage() {
         size,
     }), [page, size]);
 
-    const RowTableData = usePromiseComponent(searchIA(), dataset => <PaginatedTable<IdentityAttribute> rows={dataset.content} columns={columns} rowClick={(row) => navigate(row.id)}/>, [page, size]);
+    const RowTableData = usePromiseComponent(searchIA, dataset => <PaginatedTable<IdentityAttribute> rows={dataset.content} columns={columns} rowClick={(row) => navigate(row.id)}/>, [page, size]);
 
     return (
         <PageLayout title="Identity attributes">
