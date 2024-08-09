@@ -1,10 +1,27 @@
+import PageLayout from "../page-layout-component/page-layout";
 
-export function Loading() {
+export default function Loading() {
+    return (
+        <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+        </div>
+    )
+}
+
+export function LoadingPage() {
+    return (
+      <PageLayout>
+        <div className='text-center'>
+          <Loading/>
+        </div>
+      </PageLayout>
+    );
+}
+
+export function LoadingRow() {
   return (
-    <div className={styles['container']}>
-      <h1>Welcome to Loading!</h1>
+    <div className="text-center py-3">
+      <Loading/>
     </div>
   );
 }
-
-export default Loading;
