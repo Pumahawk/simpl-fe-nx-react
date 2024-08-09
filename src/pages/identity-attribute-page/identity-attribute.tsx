@@ -1,10 +1,10 @@
 import { Suspense, useCallback, useState } from "react";
-import PageLayout from "../lib/component/page-layout-component";
-import { IdentityAttribute, SimplClient } from "../lib/resource-framework/simpl-client";
-import { LoadingRow } from "../lib/component/loading-component";
 import { useNavigate } from "react-router-dom";
-import { usePromiseComponent } from "../lib/custom-react";
-import { ColumnDefinition, NavBar, PaginatedTable } from "../lib/component/table-component";
+import { LoadingRow } from "../../lib/component/loading-component/loading";
+import PageLayout from "../../lib/component/page-layout-component/page-layout";
+import { ColumnDefinition, NavBar, PaginatedTable } from "../../lib/component/table-component/table";
+import { usePromiseComponent } from "../../lib/custom-react";
+import { IdentityAttribute, SimplClient } from "../../lib/resource-framework/simpl-client";
 
 const columns: ColumnDefinition<IdentityAttribute>[] = [
     {

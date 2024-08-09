@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import PageLayout from "../lib/component/page-layout-component";
+import PageLayout from "../../lib/component/page-layout-component/page-layout";
 
 
 
