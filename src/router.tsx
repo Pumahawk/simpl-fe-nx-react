@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "./pages/home-page";
-import IdentityAttributePage from "./pages/identity-attribute-page";
-import ParticipantTypesPage from "./pages/participant-types-page";
 import { auth, authPage } from "./lib/auth";
 import { SimplClient } from "./lib/resource-framework/simpl-client";
-import IdentityAttributeDetailsPage from "./pages/identity-attribute-details-page";
+import HomePage from "./pages/home-page/home";
+import IdentityAttributePage from "./pages/identity-attribute-page/identity-attribute";
+import IdentityAttributeDetailsPage from "./pages/identity-attribute-details-page/identity-attribute-details";
+import ParticipantTypesPage from "./pages/participant-types-page/participant-types";
 
 export default createBrowserRouter([
     {
