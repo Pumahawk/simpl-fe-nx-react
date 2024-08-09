@@ -1,4 +1,3 @@
-import styles from './page-layout.module.scss';
 
 export function PageLayout() {
   return (

@@ -1,4 +1,3 @@
-import styles from './table.module.scss';
 
 export function Table() {
   return (
