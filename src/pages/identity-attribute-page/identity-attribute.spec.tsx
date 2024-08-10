@@ -1,4 +1,4 @@
-import { findByRole, getAllByRole, getByText, render } from '@testing-library/react';
+import { findByRole, getAllByRole, getByText, render, screen } from '@testing-library/react';
 
 import IdentityAttribute from './identity-attribute';
 import { PagedModelIdentityAtttribute } from '../..//lib/resource-framework/simpl-client';
@@ -39,10 +39,10 @@ describe('IdentityAttribute', () => {
     expect(baseElement).toBeTruthy();
   });
   it('should render list of identity attributes', async () => {
-    const { baseElement } = render(<IdentityAttribute />); 
-    const table = await findByRole(baseElement, "list");
-    expect(table).toBeTruthy();
-    getAllByRole(table, "listitem").forEach((row, i) => {
+    render(<IdentityAttribute />); 
+    const list = await screen.findByRole("list");
+    expect(list).toBeTruthy();
+    getAllByRole(list, "listitem").forEach((row, i) => {
       getByText(row, iasp.content[i].id);
       getByText(row, iasp.content[i].code);
       getByText(row, iasp.content[i].name);

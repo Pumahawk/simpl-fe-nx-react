@@ -10,15 +10,15 @@ export interface ColumnDefinition<T> {
 export interface PaginatedTableProps<T> {
     columns: ColumnDefinition<T>[];
     rows: T[];
-    rowClick: (row: T) => void
+    rowClick?: (row: T) => void
 };
 
-export function PaginatedTable<T>({columns, rowClick, rows}: PaginatedTableProps<T>): ReactNode {
+export function PaginatedTable<T>({columns, rowClick = () => {return}, rows}: PaginatedTableProps<T>): ReactNode {
     return (
         <table className="table table-hover">
             <thead>
                 <tr>
-                    { columns.map(col => <td>{col.label}</td>) }
+                    { columns.map(col => <td role="rowheader">{col.label}</td>) }
                 </tr>
             </thead>
             <tbody role="list">
