@@ -47,8 +47,8 @@ export function NavBar({page, size, options, onPageChange = () => {return}, onSi
         <div>
             <button data-testid="page-previus" className="btn btn-secondary me-2" onClick={() => onPageChange(page - 1)}>-</button>
             <button data-testid="page-next" className="btn btn-secondary me-2" onClick={() => onPageChange(page + 1)}>+</button>
-            <select onChange={(event) => onSizeChange(parseInt(event.target.value))} value={size}>
-                { options.map(opt => (<option value={opt}>{opt}</option>)) }
+            <select data-testid="size-box" onChange={(event) => onSizeChange(parseInt(event.target.value))} value={size}>
+                { options.map(opt => (<option data-testid="size-option" value={opt}>{opt}</option>)) }
             </select>
         </div>
     )

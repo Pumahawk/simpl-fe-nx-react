@@ -1,4 +1,4 @@
-import { fireEvent, getAllByRole, getByText, render, screen } from '@testing-library/react';
+import { findAllByTestId, fireEvent, getAllByRole, getByText, render, screen } from '@testing-library/react';
 
 import { ColumnDefinition, NavBar, PaginatedTable } from './table';
 
@@ -54,7 +54,7 @@ describe('NavBar', () => {
     />)
     expect(baseElement).toBeTruthy();
   })
-  it('should support change page', () => {
+  it('should change page', () => {
     const onPageChange = vi.fn();
     render(<NavBar
       page={2}
@@ -68,5 +68,22 @@ describe('NavBar', () => {
     expect(onPageChange).toBeCalledWith(1);
 
     expect(onPageChange.mock.calls.length).toBe(2);
+  })
+  it('should change size', async () => {
+    const onSizeChange = vi.fn();
+    render(<NavBar
+      page={2}
+      size={10}
+      options={[5,10,50]}
+      onSizeChange={onSizeChange}
+    />)
+
+    const sizeBox = screen.getByTestId('size-box');
+    fireEvent.change(sizeBox, {
+      target: {
+        value: "5"
+      }
+    });
+    expect(onSizeChange).toBeCalledWith(5);
   })
 })
