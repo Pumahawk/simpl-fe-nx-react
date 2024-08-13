@@ -26,6 +26,7 @@ describe('FilterBar', () => {
     }
     render(<FilterBar filters={filters}/>)
     const select = screen.getByTestId("filters-list");
+    expect(screen.getAllByTestId("filters-list-element").length).toBe(3);
     const options = screen.getAllByTestId("filters-element");
 
     expect(options[0].hidden).toBeTruthy();
@@ -37,6 +38,7 @@ describe('FilterBar', () => {
       }
     });
 
+    expect(screen.getAllByTestId("filters-list-element").length).toBe(2);
     expect(options[0].hidden).toBeFalsy();
     expect(options[1].hidden).toBeTruthy();
 
@@ -46,6 +48,7 @@ describe('FilterBar', () => {
       }
     });
 
+    expect(screen.getAllByTestId("filters-list-element").length).toBe(2);
     expect(options[0].hidden).toBeTruthy();
     expect(options[1].hidden).toBeFalsy();
 

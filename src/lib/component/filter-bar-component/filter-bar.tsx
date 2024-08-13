@@ -14,7 +14,7 @@ export function FilterBar<T extends FilterBar>({filters}: FilterBarProps<T>) {
     <div>
       <div>
         <select data-testid="filters-list" value={selected} onChange={(el) => setSelected(parseInt(el.target.value))}>
-          <option value="-1">None</option>
+          { selected === -1  && <option data-testid="filters-list-element" value="-1">None</option> }
           { Object.entries(filters).map(([name, f], i) => (<option data-testid="filters-list-element" key={i} value={i}>{name}</option>)) }
         </select>
       </div>
