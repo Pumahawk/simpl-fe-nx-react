@@ -1,8 +1,8 @@
-import { MutableRefObject, ReactNode } from "react";
+import React, { MutableRefObject, ReactNode } from "react";
 
 export interface Filter<T> {
   getValue(): T;
-  render(): ReactNode;
+  render(key?: React.Key): ReactNode;
 }
 
 interface TextFilterConfig {
@@ -27,8 +27,8 @@ export class TextFilter implements Filter<string> {
     }
   }
 
-  render(): ReactNode {
-    return <TextFilterComponent name={this._name} label={this._label} inputRef={this._input}/>;
+  render(key?: React.Key): ReactNode {
+    return <TextFilterComponent key={key} name={this._name} label={this._label} inputRef={this._input}/>;
   }
 }
 

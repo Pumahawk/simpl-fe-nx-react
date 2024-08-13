@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import FilterBar from './filter-bar';
+import { FilterBar } from './filter-bar';
 
 describe('FilterBar', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<FilterBar />);
+    const { baseElement } = render(<FilterBar filters={[]} />);
     expect(baseElement).toBeTruthy();
   });
 });

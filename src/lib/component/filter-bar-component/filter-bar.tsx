@@ -1,11 +1,29 @@
-import styles from './filter-bar.module.scss';
+import { useState } from 'react';
+import { Filter } from '../filters-component/filters';
 
-export function FilterBar() {
+export interface FilterBarProps {
+  filters: {
+    name: string,
+    filter: Filter<unknown>
+  }[]
+}
+export function FilterBar({filters}: FilterBarProps) {
+  const [selected, setSelected] = useState(0);
   return (
-    <div className={styles['container']}>
-      <h1>Welcome to FilterBar!</h1>
+    <div>
+      <div>
+        <select value={selected} onChange={(el) => setSelected(parseInt(el.target.value))}>
+          { filters.map((f, i) => (<option key={i} value={i}>{f.name}</option>)) }
+        </select>
+      </div>
+      <div>
+        {
+          filters.map((f, i) => (
+            <div hidden={i !== selected} key={i}>{ f.filter.render() }</div>
+          ))
+        }
+      </div>
     </div>
   );
 }
 
-export default FilterBar;
