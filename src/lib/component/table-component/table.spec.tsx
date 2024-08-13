@@ -1,8 +1,8 @@
-import { getAllByRole, getByText, render, screen } from '@testing-library/react';
+import { fireEvent, getAllByRole, getByText, render, screen } from '@testing-library/react';
 
-import { ColumnDefinition, PaginatedTable } from './table';
+import { ColumnDefinition, NavBar, PaginatedTable } from './table';
 
-describe('Table', () => {
+describe('PaginatedTable', () => {
   it('should render successfully', () => {
     const { baseElement } = render(<PaginatedTable columns={[]} rows={[]} />);
     expect(baseElement).toBeTruthy();
@@ -42,4 +42,31 @@ describe('Table', () => {
     const list = screen.getByRole("list");
     expect(list).toBeTruthy();
   });
+
 });
+
+describe('NavBar', () => {
+  it('should render', () => {
+    const { baseElement } = render(<NavBar
+      page={0}
+      size={0}
+      options={[]}
+    />)
+    expect(baseElement).toBeTruthy();
+  })
+  it('should support change page', () => {
+    const onPageChange = vi.fn();
+    render(<NavBar
+      page={2}
+      size={10}
+      options={[]}
+      onPageChange={onPageChange}
+    />)
+    fireEvent.click(screen.getByTestId('page-next'));
+    expect(onPageChange).toBeCalledWith(3);
+    fireEvent.click(screen.getByTestId('page-previus'));
+    expect(onPageChange).toBeCalledWith(1);
+
+    expect(onPageChange.mock.calls.length).toBe(2);
+  })
+})
