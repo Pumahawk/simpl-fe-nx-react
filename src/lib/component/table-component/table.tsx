@@ -7,13 +7,13 @@ export interface ColumnDefinition<T> {
     mapper: (row: T) => ColumnValues;
 }
 
-export interface PaginatedTableProps<T> {
+export interface TableProps<T> {
     columns: ColumnDefinition<T>[];
     rows: T[];
-    rowClick?: (row: T) => void
-};
+    rowClick?: (row: T) => void;
+}
 
-export function PaginatedTable<T>({columns, rowClick = () => {return}, rows}: PaginatedTableProps<T>): ReactNode {
+export function Table<T>({columns, rows, rowClick = () => {return}}: TableProps<T>) {
     return (
         <table className="table table-hover">
             <thead>
@@ -31,6 +31,32 @@ export function PaginatedTable<T>({columns, rowClick = () => {return}, rows}: Pa
                 }
             </tbody>
         </table>
+    )
+}
+
+export interface PaginatedTableProps<T> extends TableProps<T>, NavBarProps {
+};
+
+export function PaginatedTable<T>({
+
+    // Table props
+    columns,
+    rows,
+    rowClick = () => {return},
+
+    // NavBar props
+    options,
+    page,
+    size,
+    onPageChange,
+    onSizeChange
+
+}: PaginatedTableProps<T>): ReactNode {
+    return (
+        <>
+            <Table {...{columns, rowClick, rows}} />
+            <NavBar {...{options, page, size, onPageChange, onSizeChange}}/>
+        </>
     );
 }
 

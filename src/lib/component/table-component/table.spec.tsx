@@ -1,10 +1,10 @@
-import { findAllByTestId, fireEvent, getAllByRole, getAllByTestId, getByText, render, screen } from '@testing-library/react';
+import { fireEvent, getAllByRole, getByText, render, screen } from '@testing-library/react';
 
-import { ColumnDefinition, NavBar, PaginatedTable } from './table';
+import { ColumnDefinition, NavBar, Table } from './table';
 
-describe('PaginatedTable', () => {
+describe('Table', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<PaginatedTable columns={[]} rows={[]} />);
+    const { baseElement } = render(<Table columns={[]} rows={[]} />);
     expect(baseElement).toBeTruthy();
   });
 
@@ -23,7 +23,7 @@ describe('PaginatedTable', () => {
 
     const rows: string[] = ["value_1", "value_2"];
 
-    render(<PaginatedTable {...{columns, rows}} />);
+    render(<Table {...{columns, rows}} />);
 
     const list = screen.getByRole("list");
     expect(list).toBeTruthy();
@@ -37,7 +37,7 @@ describe('PaginatedTable', () => {
   });
   
   it('should render empy list', () => {
-    render(<PaginatedTable columns={[]} rows={[]} />);
+    render(<Table columns={[]} rows={[]} />);
 
     const list = screen.getByRole("list");
     expect(list).toBeTruthy();
@@ -69,7 +69,7 @@ describe('NavBar', () => {
 
     expect(onPageChange.mock.calls.length).toBe(2);
   })
-  it('should select correct size', () => {
+  it('should render correct size', () => {
     render(<NavBar
       options={[5, 10, 50]}
       size={10}
