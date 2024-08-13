@@ -1,25 +1,27 @@
 import { useState } from 'react';
 import { Filter } from '../filters-component/filters';
 
-export interface FilterBarProps {
-  filters: {
-    name: string,
-    filter: Filter<unknown>
-  }[]
+export interface FilterBar {
+  [key: string]: Filter<unknown>,
 }
-export function FilterBar({filters}: FilterBarProps) {
-  const [selected, setSelected] = useState(0);
+
+export interface FilterBarProps<T extends FilterBar> {
+  filters: T
+}
+export function FilterBar<T extends FilterBar>({filters}: FilterBarProps<T>) {
+  const [selected, setSelected] = useState(-1);
   return (
     <div>
       <div>
-        <select value={selected} onChange={(el) => setSelected(parseInt(el.target.value))}>
-          { filters.map((f, i) => (<option key={i} value={i}>{f.name}</option>)) }
+        <select data-testid="filters-list" value={selected} onChange={(el) => setSelected(parseInt(el.target.value))}>
+          <option value="-1">None</option>
+          { Object.entries(filters).map(([name, f], i) => (<option data-testid="filters-list-element" key={i} value={i}>{name}</option>)) }
         </select>
       </div>
       <div>
         {
-          filters.map((f, i) => (
-            <div hidden={i !== selected} key={i}>{ f.filter.render() }</div>
+          Object.entries(filters).map(([name, f], i) => (
+            <div data-testid="filters-element" hidden={i !== selected} key={i}>{ f.render() }</div>
           ))
         }
       </div>
