@@ -82,9 +82,9 @@ describe('TableSearchRest', () => {
     />)
 
     expect(searchFn).toBeCalledTimes(1);
-    const search = await screen.findByTestId("table-search-rest");
+    await screen.findByTestId("table-search-rest");
 
-    fireEvent.submit(getByTestId(search, "filters-form"));
+    fireEvent.submit(screen.getByTestId("filters-form"));
     await waitFor(() => expect(searchFn).toBeCalledTimes(2));
 
     const el = searchFn.mock.calls[1][0] as FetchArgs<UserForm>;

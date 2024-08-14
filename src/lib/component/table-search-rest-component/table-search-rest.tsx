@@ -2,7 +2,7 @@ import { usePromiseComponent } from '../..//custom-react';
 import { PagedModel } from '../../resource-framework/simpl-client';
 import { FilterBar} from '../filter-bar-component/filter-bar';
 import { ColumnDefinition, PaginatedTable } from '../table-component/table';
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 
 export interface FetchArgs<F extends FilterBar> {
   page: number;
@@ -31,39 +31,50 @@ export interface TableSearchRestProp<DataType, FilterType extends FilterBar>  {
 }
 
 export function TableSearchRest<DataType, FilterType extends FilterBar>({search, fallback, filterBar, paginatedTable, initSize}: TableSearchRestProp<DataType, FilterType>) {
+  const [size, setSize] = useState(initSize);
   const [searchAPI, setSearchAPI] = useState<() => Promise<PagedModel<DataType>>>(() => () => search({
     filters: filterBar?.filters,
     page: 0,
     size: initSize,
   }));
-  const Render = usePromiseComponent(searchAPI, dataset => (
-    <div data-testid="table-search-rest">
+  const Render = usePromiseComponent(searchAPI, dataset => {
+    setSize(dataset.page.size);
+    return (
+      <div data-testid="table-search-rest">
+        <PaginatedTable
+          {...paginatedTable}
+          page={dataset.page.number}
+          size={dataset.page.size}
+          rows={dataset.content}
+          onPageChange={page => setSearchAPI(() => () => search({
+            filters: filterBar?.filters,
+            page,
+            size: dataset.page.size,
+          }))}
+          onSizeChange={size => setSearchAPI(() => () => search({
+            filters: filterBar?.filters,
+            page: dataset.page.number,
+            size,
+          }))}
+        />
+      </div>
+    )
+  }, [searchAPI]);
+
+  return (
+    <div>
       {
         filterBar && 
         <FilterBar {...filterBar} onSubmit={(filters) => setSearchAPI(() => () => search({
           filters: filters,
           page: 0,
-          size: dataset.page.size,
+          size,
         }))}/>
       }
-      <PaginatedTable
-        {...paginatedTable}
-        page={dataset.page.number}
-        size={dataset.page.size}
-        rows={dataset.content}
-        onPageChange={page => setSearchAPI(() => () => search({
-          filters: filterBar?.filters,
-          page,
-          size: dataset.page.size,
-        }))}
-        onSizeChange={size => setSearchAPI(() => () => search({
-          filters: filterBar?.filters,
-          page: dataset.page.number,
-          size,
-        }))}
-      />
+      <Suspense fallback={fallback}>
+        <Render/>
+      </Suspense>;
     </div>
-  ), [searchAPI]);
-
-  return <Suspense fallback={fallback}><Render/></Suspense>;
+  )
+  
 }
