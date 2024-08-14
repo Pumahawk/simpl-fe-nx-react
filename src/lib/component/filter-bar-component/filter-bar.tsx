@@ -6,12 +6,13 @@ export interface FilterBar {
 }
 
 export interface FilterBarProps<T extends FilterBar> {
-  filters: T
+  filters: T,
+  onSubmit?: (data: T) => void,
 }
-export function FilterBar<T extends FilterBar>({filters}: FilterBarProps<T>) {
+export function FilterBar<T extends FilterBar>({filters, onSubmit = () => {return}}: FilterBarProps<T>) {
   const [selected, setSelected] = useState(-1);
   return (
-    <div>
+    <form data-testid="filters-form" onSubmit={e => {e.preventDefault();onSubmit(filters)}}>
       <div>
         <select data-testid="filters-list" value={selected} onChange={(el) => setSelected(parseInt(el.target.value))}>
           { selected === -1  && <option data-testid="filters-list-element" value="-1">None</option> }
@@ -25,7 +26,10 @@ export function FilterBar<T extends FilterBar>({filters}: FilterBarProps<T>) {
           ))
         }
       </div>
-    </div>
+      <div>
+        <button>Submit</button>
+      </div>
+    </form>
   );
 }
 

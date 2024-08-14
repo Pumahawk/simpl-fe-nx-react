@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { FilterBar } from './filter-bar';
-import { TextFilter } from '../filters-component/filters';
+import { Filter } from '../filters-component/filters';
 
 describe('FilterBar', () => {
   it('should render successfully', () => {
@@ -10,19 +10,18 @@ describe('FilterBar', () => {
   });
   it('should display selected element', () => {
     interface SearchFilters extends FilterBar {
-      name: TextFilter;
-      email: TextFilter;
-
+      name: Filter<string>;
+      email: Filter<string>;
     }
     const filters: SearchFilters = {
-      name: new TextFilter({
-        label: "name",
-        name: "name",
-      }),
-      email: new TextFilter({
-        label: "email",
-        name: "email",
-      }),
+      name: {
+        getValue: () => "name",
+        render: () => <span>Name</span>,
+      },
+      email: {
+        getValue: () => "email",
+        render: () => <span>Email</span>,
+      },
     }
     render(<FilterBar filters={filters}/>)
     const select = screen.getByTestId("filters-list");
@@ -52,5 +51,30 @@ describe('FilterBar', () => {
     expect(options[0].hidden).toBeTruthy();
     expect(options[1].hidden).toBeFalsy();
 
+  })
+  it('should display selected element', () => {
+    interface SearchFilters extends FilterBar {
+      name: Filter<string>;
+      email: Filter<string>;
+    }
+    const filters: SearchFilters = {
+      name: {
+        getValue: () => "input name",
+        render: () => <span>Name</span>,
+      },
+      email: {
+        getValue: () => "input email",
+        render: () => <span>Email</span>,
+      },
+    }
+
+    const onSubmit = vi.fn();
+
+    render(<FilterBar filters={filters} onSubmit={onSubmit}/>)
+    fireEvent.submit(screen.getByTestId("filters-form"));
+
+    const arg = onSubmit.mock.lastCall[0] as SearchFilters;
+    expect(arg.name.getValue()).toBe("input name");
+    expect(arg.email.getValue()).toBe("input email");
   })
 });
