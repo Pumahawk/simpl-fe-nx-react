@@ -73,7 +73,7 @@ export function TableSearchRest<DataType, FilterType extends FilterBar>({search,
       }
       <Suspense fallback={fallback}>
         <Render/>
-      </Suspense>;
+      </Suspense>
     </div>
   )
   
