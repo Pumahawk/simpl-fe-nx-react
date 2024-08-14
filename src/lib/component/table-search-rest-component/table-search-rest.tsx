@@ -46,6 +46,7 @@ export function TableSearchRest<DataType, FilterType extends FilterBar>({search,
           page={dataset.page.number}
           size={dataset.page.size}
           rows={dataset.content}
+          totalPages={dataset.page.totalPages}
           onPageChange={page => setSearchAPI(() => () => search({
             filters: filterBar?.filters,
             page,

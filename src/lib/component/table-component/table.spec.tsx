@@ -100,4 +100,27 @@ describe('NavBar', () => {
     });
     expect(onSizeChange).toBeCalledWith(5);
   })
+  it('should diable previus button', () => {
+    const onSizeChange = vi.fn();
+    render(<NavBar
+      page={0}
+      size={10}
+      options={[5,10,50]}
+      onPageChange={onSizeChange}
+    />)
+    fireEvent.click(screen.getByTestId('page-previus'));
+    expect(onSizeChange).toBeCalledTimes(0);
+  })
+  it('should diable next button', () => {
+    const onSizeChange = vi.fn();
+    render(<NavBar
+      page={0}
+      size={10}
+      options={[5,10,50]}
+      totalPages={1}
+      onPageChange={onSizeChange}
+    />)
+    fireEvent.click(screen.getByTestId('page-next'));
+    expect(onSizeChange).toBeCalledTimes(0);
+  })
 })

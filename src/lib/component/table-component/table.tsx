@@ -48,6 +48,7 @@ export function PaginatedTable<T>({
     options,
     page,
     size,
+    totalPages,
     onPageChange,
     onSizeChange
 
@@ -55,7 +56,7 @@ export function PaginatedTable<T>({
     return (
         <>
             <Table {...{columns, rowClick, rows}} />
-            <NavBar {...{options, page, size, onPageChange, onSizeChange}}/>
+            <NavBar {...{options, page, size, onPageChange, onSizeChange, totalPages}}/>
         </>
     );
 }
@@ -63,16 +64,17 @@ export function PaginatedTable<T>({
 export interface NavBarProps {
     page: number;
     size: number;
+    totalPages?: number;
     onPageChange?: (page: number) => void;
     onSizeChange?: (size: number) => void;
     options: number[]
 }
 
-export function NavBar({page, size, options, onPageChange = () => {return}, onSizeChange = () => {return}}: NavBarProps) {
+export function NavBar({page, totalPages, size, options, onPageChange = () => {return}, onSizeChange = () => {return}}: NavBarProps) {
     return (
         <div>
-            <button data-testid="page-previus" className="btn btn-secondary me-2" onClick={() => onPageChange(page - 1)}>-</button>
-            <button data-testid="page-next" className="btn btn-secondary me-2" onClick={() => onPageChange(page + 1)}>+</button>
+            <button disabled={page - 1 < 0} data-testid="page-previus" className="btn btn-secondary me-2" onClick={() => onPageChange(page - 1)}>-</button>
+            <button disabled={totalPages ? page + 1 >= totalPages : false} data-testid="page-next" className="btn btn-secondary me-2" onClick={() => onPageChange(page + 1)}>+</button>
             <select data-testid="size-box" onChange={(event) => onSizeChange(parseInt(event.target.value))} value={size}>
                 { options.map(opt => (<option data-testid="size-option" value={opt}>{opt}</option>)) }
             </select>
