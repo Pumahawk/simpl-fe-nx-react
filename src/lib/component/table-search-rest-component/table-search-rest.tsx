@@ -4,7 +4,7 @@ import { FilterBar} from '../filter-bar-component/filter-bar';
 import { ColumnDefinition, PaginatedTable } from '../table-component/table';
 import React, { Suspense, useState } from 'react';
 
-export interface FetchArgs<F extends FilterBar> {
+export interface FetchArgs<F extends FilterBar = FilterBar> {
   page: number;
   size: number;
   filters?: F;
