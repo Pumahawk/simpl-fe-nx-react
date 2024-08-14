@@ -1,10 +1,9 @@
-import { Suspense, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoadingRow } from "../../lib/component/loading-component/loading";
 import PageLayout from "../../lib/component/page-layout-component/page-layout";
-import { ColumnDefinition, PaginatedTable } from "../../lib/component/table-component/table";
-import { usePromiseComponent } from "../../lib/custom-react";
-import { IdentityAttribute, SimplClient } from "../../lib/resource-framework/simpl-client";
+import { FetchArgs, TableSearchRest } from "../../lib/component/table-search-rest-component/table-search-rest";
+import { IdentityAttribute, PagedModel, SimplClient } from "../../lib/resource-framework/simpl-client";
+import { ColumnDefinition } from "../../lib/component/table-component/table";
+import { LoadingRow } from "../../lib/component/loading-component/loading";
 
 const columns: ColumnDefinition<IdentityAttribute>[] = [
     {
@@ -24,33 +23,25 @@ const columns: ColumnDefinition<IdentityAttribute>[] = [
 export default function IdentityAttributePage() {
     const navigate = useNavigate();
 
-    const [page, setPage] = useState(0);
-    const [size, setSize] = useState(10);
-
-    const searchIA = useCallback(() => SimplClient.sap.identityAttibute.search({
-        page,
-        size,
-    }), [page, size]);
-
-    const RowTableData = usePromiseComponent(searchIA, dataset => <PaginatedTable<IdentityAttribute>
-            rows={dataset.content}
-            columns={columns}
-            rowClick={(row) => navigate(row.id)}
-            options={[10, 20, 50, 100]}
-            onPageChange={setPage}
-            onSizeChange={size => {
-                setPage(0);
-                setSize(size);
-            }}
-            {...{size, page}}
-        />, [page, size]);
-
     return (
         <PageLayout title="Identity attributes">
-            <Suspense fallback={<LoadingRow/>}>
-                <RowTableData/>
-            </Suspense>
+            <TableSearchRest
+                fallback={<LoadingRow/>}
+                initSize={10}
+                search={searchAPI}
+                paginatedTable={{
+                    columns,
+                    options: [10, 20, 50, 100],
+                    rowClick: (row) => navigate(row.id)
+                }}
+            />
         </PageLayout>
     )
 }
 
+function searchAPI(arg: FetchArgs): Promise<PagedModel<IdentityAttribute>> {
+    return SimplClient.sap.identityAttibute.search({
+        page: arg.page,
+        size: arg.size
+    })
+}
