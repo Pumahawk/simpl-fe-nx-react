@@ -1,8 +1,6 @@
-import styles from './filter.module.scss';
-
 export function Filter() {
   return (
-    <div className={styles['container']}>
+    <div>
       <h1>Welcome to Filter!</h1>
     </div>
   );
