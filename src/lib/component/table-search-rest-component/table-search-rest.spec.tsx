@@ -88,8 +88,8 @@ describe('TableSearchRest', () => {
     await waitFor(() => expect(searchFn).toBeCalledTimes(2));
 
     const el = searchFn.mock.calls[1][0] as FetchArgs<UserForm>;
-    expect(el.filters.name.getValue()).toBe("my name")
-    expect(el.filters.age.getValue()).toBe(10)
+    expect(el.filters?.name.getValue()).toBe("my name")
+    expect(el.filters?.age.getValue()).toBe(10)
 
     fireEvent.click(screen.getByTestId("page-next"));
     await waitFor(() => expect(searchFn).toBeCalledTimes(3));
