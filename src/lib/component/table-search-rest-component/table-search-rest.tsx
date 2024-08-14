@@ -2,7 +2,7 @@ import { usePromiseComponent } from '../..//custom-react';
 import { PagedModel } from '../../resource-framework/simpl-client';
 import { FilterBar} from '../filter-bar-component/filter-bar';
 import { ColumnDefinition, PaginatedTable } from '../table-component/table';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useState } from 'react';
 
 export interface FetchArgs<F extends FilterBar> {
   page: number;

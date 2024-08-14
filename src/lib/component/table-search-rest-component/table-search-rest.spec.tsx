@@ -1,8 +1,9 @@
-import { findByTestId, fireEvent, getByTestId, render, screen, waitFor } from '@testing-library/react';
+import { findByTestId, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import {FetchArgs, TableSearchRest} from './table-search-rest';
 import { FilterBar } from '../filter-bar-component/filter-bar';
 import { Filter } from '../filters-component/filters';
+import { PagedModel } from 'src/lib/resource-framework/simpl-client';
 
 describe('TableSearchRest', () => {
   it('should render successfully', async () => {
@@ -29,6 +30,24 @@ describe('TableSearchRest', () => {
     const table = await findByTestId(baseElement, "table-search-rest");
     expect(table).toBeTruthy();
   });
+
+  it('should show filters before data', () => {
+    render(
+      <TableSearchRest
+        filterBar={{filters: {}}}
+        initSize={10}
+        paginatedTable={{
+          columns: [],
+          options: [10],
+        }}
+        search={() => new Promise<PagedModel<unknown>>(() => {return})}
+      />
+    );
+
+    const form = screen.getByTestId("filters-form");
+    expect(form).toBeTruthy();
+
+  })
 
   it('should support type search', async () => {
     interface UserInfo {
