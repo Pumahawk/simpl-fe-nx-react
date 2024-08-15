@@ -54,7 +54,7 @@ export function TableSearchRest<DataType, FilterType extends FilterBar>({search,
           }))}
           onSizeChange={size => setSearchAPI(() => () => search({
             filters: filterBar?.filters,
-            page: dataset.page.number,
+            page: 0,
             size,
           }))}
         />
