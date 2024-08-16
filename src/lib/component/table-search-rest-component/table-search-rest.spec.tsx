@@ -1,11 +1,18 @@
 import { findByTestId, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import {FetchArgs, TableSearchRest} from './table-search-rest';
-import { FilterBar } from '../filter-bar-component/filter-bar';
+import { FilterBar, FilterBarProps } from '../filter-bar-component/filter-bar';
 import { Filter } from '../filters-component/filters';
 import { PagedModel } from 'src/lib/resource-framework/simpl-client';
+import { PaginatedTable } from '../table-component/table';
+
+vi.mock('../table-component/table');
+vi.mock('../filter-bar-component/filter-bar');
 
 describe('TableSearchRest', () => {
+  beforeAll(() => {
+    vi.resetAllMocks();
+  })
   it('should render successfully', async () => {
     const { baseElement } = render(
       <TableSearchRest
@@ -32,6 +39,10 @@ describe('TableSearchRest', () => {
   });
 
   it('should show filters before data', () => {
+    const FilterBarMock = vi.mocked(FilterBar);
+    FilterBarMock.mockImplementation(() => {
+      return <div data-testid="filters-form">filters</div>
+    })
     render(
       <TableSearchRest
         filterBar={{filters: {}}}
@@ -43,13 +54,22 @@ describe('TableSearchRest', () => {
         search={() => new Promise<PagedModel<unknown>>(() => {return})}
       />
     );
-
     const form = screen.getByTestId("filters-form");
     expect(form).toBeTruthy();
-
   })
 
   it('should support type search', async () => {
+    vi.mocked(FilterBar).mockImplementation(arg => <MockFilterBar {...{...arg, onSubmitArg: {
+      name: {
+        getValue: () => "my name",
+        render: () => <span>filter name</span>
+      },
+      age: {
+        getValue: () => 10,
+        render: () => <span>filter age</span>
+      }
+    }}}/>)
+    vi.mocked(PaginatedTable).mockReturnValue(<div>MockPaginatedTable</div>);
     interface UserInfo {
       name: string;
       age: number;
@@ -99,7 +119,6 @@ describe('TableSearchRest', () => {
       initSize={10}
       search={searchFn}
     />)
-
     expect(searchFn).toBeCalledTimes(1);
     await screen.findByTestId("table-search-rest");
 
@@ -110,19 +129,23 @@ describe('TableSearchRest', () => {
     expect(el.filters?.name.getValue()).toBe("my name")
     expect(el.filters?.age.getValue()).toBe(10)
 
-    fireEvent.click(screen.getByTestId("page-next"));
+    vi.mocked(PaginatedTable).mock.lastCall![0].onPageChange!(1);
     await waitFor(() => expect(searchFn).toBeCalledTimes(3));
     
     const el2 = searchFn.mock.calls[2][0] as FetchArgs<UserForm>;
     expect(el2.page).toBe(1);
 
-    fireEvent.change(await screen.findByTestId("size-box"), {
-      target: {
-        value: "50"
-      }
-    })
+    vi.mocked(PaginatedTable).mock.lastCall![0].onSizeChange!(50);
     await waitFor(() => expect(searchFn).toBeCalledTimes(4));
     const el3 = searchFn.mock.calls[3][0] as FetchArgs<UserForm>;
     expect(el3.size).toBe(50);
   })
 });
+
+
+function MockFilterBar<T extends FilterBar = FilterBar>({onSubmit, onSubmitArg}:(FilterBarProps<T> & {onSubmitArg: T})) {
+  return (
+    <form data-testid="filters-form" onSubmit={() => onSubmit && onSubmit(onSubmitArg)}>
+    </form>
+  );
+}

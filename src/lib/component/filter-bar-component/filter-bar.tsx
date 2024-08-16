@@ -5,7 +5,7 @@ export interface FilterBar {
   [key: string]: Filter<unknown>,
 }
 
-export interface FilterBarProps<T extends FilterBar> {
+export interface FilterBarProps<T extends FilterBar = FilterBar> {
   filters: T,
   onSubmit?: (data: T) => void,
 }
