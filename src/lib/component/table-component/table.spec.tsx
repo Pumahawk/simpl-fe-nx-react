@@ -1,4 +1,4 @@
-import { fireEvent, getAllByRole, getByText, render, screen } from '@testing-library/react';
+import { fireEvent, getAllByRole, getAllByTestId, getByTestId, getByText, render, screen } from '@testing-library/react';
 
 import { ColumnDefinition, NavBar, Table } from './table';
 
@@ -122,5 +122,48 @@ describe('NavBar', () => {
     />)
     fireEvent.click(screen.getByTestId('page-next'));
     expect(onSizeChange).toBeCalledTimes(0);
+  })
+  it('should show checkbox', () => {
+    render(<Table
+      columns={[]}
+      selection={{current: []}}
+      rows={[{value: "v1"}]}
+    />);
+    screen.getByTestId("checkbox-all");
+    screen.getByTestId("checkbox-item");
+  })
+  it('should select and deselect some row', () => {
+    const selection = {
+      current: []
+    }
+    render(<Table
+      columns={[]}
+      rows={["A", "B", "C", "D"]}
+      selection={selection}
+    />)
+    const items = screen.getAllByTestId("checkbox-item");
+    fireEvent.click(items[1]);
+    fireEvent.click(items[3]);
+    expect(selection.current).toStrictEqual(["B", "D"]);
+    fireEvent.click(items[1]);
+    expect(selection.current).toStrictEqual(["D"]);
+  })
+  it('should select and deselect all rows', () => {
+    const selection = {
+      current: []
+    }
+    render(<Table
+      columns={[]}
+      rows={["A", "B", "C", "D"]}
+      selection={selection}
+    />)
+    const items = screen.getAllByTestId("checkbox-item");
+    fireEvent.click(items[1]);
+    fireEvent.click(items[3]);
+    expect(selection.current).toStrictEqual(["B", "D"]);
+    fireEvent.click(screen.getByTestId("checkbox-all"));
+    expect(selection.current).toStrictEqual(["A", "B", "C", "D"]);
+    fireEvent.click(screen.getByTestId("checkbox-all"));
+    expect(selection.current).toStrictEqual([]);
   })
 })
