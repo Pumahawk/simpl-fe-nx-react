@@ -139,6 +139,7 @@ describe('TableSearchRest', () => {
     await waitFor(() => expect(searchFn).toBeCalledTimes(4));
     const el3 = searchFn.mock.calls[3][0] as FetchArgs<UserForm>;
     expect(el3.size).toBe(50);
+    expect(el3.page).toBe(0);
   })
 });
 
