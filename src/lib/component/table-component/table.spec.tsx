@@ -181,4 +181,16 @@ describe('NavBar', () => {
     fireEvent.click(items[1]);
     expect(rowClick).toBeCalledTimes(0);
   })
+  it('should select box on render', () => {
+    const selection = {
+      current: ["B"]
+    }
+    render(<Table
+      columns={[]}
+      rows={["A", "B", "C", "D"]}
+      selection={selection}
+    />)
+    const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
+    expect(items[1].checked).toBe(true);
+  })
 })

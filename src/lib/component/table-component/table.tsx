@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useRef } from "react";
+import { ReactNode, useCallback, useEffect, useRef } from "react";
 
 export type ColumnValues = string | ReactNode;
 
@@ -16,6 +16,14 @@ export interface TableProps<T> {
 }
 
 export function Table<T>({columns, rows, selection, rowClick = () => {return}}: TableProps<T>) {
+    const checkbox = useRef(rows.map(row => ({el: row, current: null})));
+    useEffect(() => {
+        checkbox.current?.forEach(ref => {
+            if (ref.current) {
+                (ref.current as HTMLInputElement).checked = selection?.current.includes(ref.el) ? true : false; 
+            }
+        })
+    })
     return (
         <table className="table table-hover">
             <thead>
@@ -31,7 +39,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
                     rows.map((row, i) => (
                         <tr key={i} role="listitem" onClick={() => rowClick(row)}>
                             {
-                                selection && (<td role="rowheader"><input data-testid="checkbox-item" type="checkbox" value="true" onChange={e => updateSelection(rows, selection, row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
+                                selection && checkbox.current && (<td role="rowheader"><input ref={checkbox.current[i]} data-testid="checkbox-item" type="checkbox" value="true" onChange={e => updateSelection(rows, selection, row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
                             }
                             { columns.map(col => <td>{col.mapper(row)}</td>) }
                         </tr>
