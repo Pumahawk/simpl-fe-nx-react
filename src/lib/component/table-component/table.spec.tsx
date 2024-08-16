@@ -166,4 +166,19 @@ describe('NavBar', () => {
     fireEvent.click(screen.getByTestId("checkbox-all"));
     expect(selection.current).toStrictEqual([]);
   })
+  it('should not fire rowClick on checkbox', () => {
+    const rowClick = vi.fn();
+    const selection = {
+      current: []
+    }
+    render(<Table
+      columns={[]}
+      rows={["A", "B", "C", "D"]}
+      selection={selection}
+      rowClick={rowClick}
+    />)
+    const items = screen.getAllByTestId("checkbox-item");
+    fireEvent.click(items[1]);
+    expect(rowClick).toBeCalledTimes(0);
+  })
 })

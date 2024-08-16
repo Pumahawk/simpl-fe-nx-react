@@ -21,7 +21,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
             <thead>
                 <tr>
                     {
-                        selection && (<td role="rowheader"><input data-testid="checkbox-all" type="checkbox" onChange={e => updateAllSelection(rows, selection, e.target.checked)} /></td>)
+                        selection && (<td role="rowheader"><input data-testid="checkbox-all" type="checkbox" onChange={e => updateAllSelection(rows, selection, e.target.checked)}/></td>)
                     }
                     { columns.map(col => <td role="rowheader">{col.label}</td>) }
                 </tr>
@@ -31,7 +31,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
                     rows.map((row, i) => (
                         <tr key={i} role="listitem" onClick={() => rowClick(row)}>
                             {
-                                selection && (<td role="rowheader"><input data-testid="checkbox-item" type="checkbox" value="true" onChange={e => updateSelection(rows, selection, row, e.target.checked)}/></td>)
+                                selection && (<td role="rowheader"><input data-testid="checkbox-item" type="checkbox" value="true" onChange={e => updateSelection(rows, selection, row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
                             }
                             { columns.map(col => <td>{col.mapper(row)}</td>) }
                         </tr>
