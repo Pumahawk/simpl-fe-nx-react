@@ -32,7 +32,8 @@ export default function IdentityAttributePage() {
                 paginatedTable={{
                     columns,
                     options: [10, 20, 50, 100],
-                    rowClick: (row) => navigate(row.id)
+                    rowClick: ia => navigate(ia.id),
+                    getRowId: ia => ia.id,
                 }}
             />
         </PageLayout>

@@ -17,6 +17,7 @@ export interface FilterBarConfig<T extends FilterBar> {
 export interface PaginatedTableConfig<T> {
   options: number[]
   columns: ColumnDefinition<T>[];
+  getRowId: (row: T) => string | number;
   rowClick?: (row: T) => void;
 };
 
