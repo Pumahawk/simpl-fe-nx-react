@@ -193,4 +193,36 @@ describe('NavBar', () => {
     const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
     expect(items[1].checked).toBe(true);
   })
+  it('should respect invert property on render', () => {
+    const selection = {
+      current: ["B"]
+    }
+    render(<Table
+      columns={[]}
+      rows={["A", "B", "C", "D"]}
+      selection={{elements: selection, invert: true}}
+    />)
+    const selectAll = (screen.getByTestId("checkbox-all")) as HTMLInputElement;
+    expect(selectAll.checked).toBe(true);
+    const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
+    expect(items.filter(item => item.checked).map(el => el.dataset.element)).toStrictEqual(["A", "C", "D"]);
+  })
+  it('should select and deselect all rows on invert', () => {
+    const selection = {
+      current: []
+    }
+    render(<Table
+      columns={[]}
+      rows={["A", "B", "C", "D"]}
+      selection={{elements: selection, invert: true}}
+    />)
+    const items = screen.getAllByTestId("checkbox-item");
+    fireEvent.click(items[1]);
+    fireEvent.click(items[3]);
+    expect(selection.current).toStrictEqual(["B", "D"]);
+    fireEvent.click(screen.getByTestId("checkbox-all"));
+    expect(selection.current).toStrictEqual(["A", "B", "C", "D"]);
+    fireEvent.click(screen.getByTestId("checkbox-all"));
+    expect(selection.current).toStrictEqual([]);
+  })
 })

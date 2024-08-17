@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 export type ColumnValues = string | ReactNode;
 
@@ -18,11 +18,19 @@ export interface TableProps<T> {
 }
 
 export function Table<T>({columns, rows, selection, rowClick = () => {return}}: TableProps<T>) {
+    const render = useState()[1];
+    
+    const selectAllCheckbox = useRef(null);
     const checkbox = useRef(rows.map(row => ({el: row, current: null})));
+    useEffect(() => {
+        if (selection && selection.invert && selectAllCheckbox.current) {
+            (selectAllCheckbox.current as HTMLInputElement).checked = true;
+        }
+    }, [selection])
     useEffect(() => {
         checkbox.current?.forEach(ref => {
             if (ref.current) {
-                (ref.current as HTMLInputElement).checked = selection?.elements.current.includes(ref.el) ? true : false; 
+                (ref.current as HTMLInputElement).checked = selection?.elements.current.includes(ref.el) ? !selection.invert : !!selection?.invert;
             }
         })
     })
@@ -31,7 +39,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
             <thead>
                 <tr>
                     {
-                        selection && (<td role="rowheader"><input data-testid="checkbox-all" type="checkbox" onChange={e => updateAllSelection(rows, selection.elements, e.target.checked)}/></td>)
+                        selection && (<td role="rowheader"><input ref={selectAllCheckbox} data-testid="checkbox-all" type="checkbox" onChange={e => {updateAllSelection(rows, selection.elements, selection.invert || false, e.target.checked); render(undefined);}}/></td>)
                     }
                     { columns.map(col => <td role="rowheader">{col.label}</td>) }
                 </tr>
@@ -41,7 +49,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
                     rows.map((row, i) => (
                         <tr key={i} role="listitem" onClick={() => rowClick(row)}>
                             {
-                                selection && checkbox.current && (<td role="rowheader"><input ref={checkbox.current[i]} data-testid="checkbox-item" type="checkbox" value="true" onChange={e => updateSelection(rows, selection.elements, row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
+                                selection && checkbox.current && (<td role="rowheader"><input ref={checkbox.current[i]} data-testid="checkbox-item" type="checkbox" data-element={row} onChange={e => updateSelection(selection.elements, selection.invert || false, row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
                             }
                             { columns.map(col => <td>{col.mapper(row)}</td>) }
                         </tr>
@@ -100,12 +108,12 @@ export function NavBar({page, totalPages, size, options, onPageChange = () => {r
     )
 }
 
-function updateAllSelection<T>(rows: T[], selection: React.MutableRefObject<T[]>, add: boolean) {
-    selection.current = add ? rows.concat() : [];
+function updateAllSelection<T>(rows: T[], elements: React.MutableRefObject<T[]>, invert: boolean, add: boolean) {
+    elements.current = (invert ? !add : add) ? rows.concat() : [];
 }
 
-function updateSelection<T>(rows: T[], selection: React.MutableRefObject<T[]>, row: T, add: boolean) {
-    selection.current = add
-        ? selection.current.concat([row])
-        : selection.current.filter(r => r !== row);
+function updateSelection<T>(elements: React.MutableRefObject<T[]>, invert: boolean, row: T, add: boolean) {
+    elements.current = (invert ? !add : add)
+        ? elements.current.concat([row])
+        : elements.current.filter(r => r !== row);
 }
