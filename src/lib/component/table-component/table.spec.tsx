@@ -1,4 +1,4 @@
-import { fireEvent, getAllByRole, getAllByTestId, getByTestId, getByText, render, screen } from '@testing-library/react';
+import { fireEvent, getAllByRole, getByText, render, screen } from '@testing-library/react';
 
 import { ColumnDefinition, NavBar, Table } from './table';
 
@@ -126,7 +126,7 @@ describe('NavBar', () => {
   it('should show checkbox', () => {
     render(<Table
       columns={[]}
-      selection={{current: []}}
+      selection={{elements: {current: []}}}
       rows={[{value: "v1"}]}
     />);
     screen.getByTestId("checkbox-all");
@@ -139,7 +139,7 @@ describe('NavBar', () => {
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
-      selection={selection}
+      selection={{elements: selection}}
     />)
     const items = screen.getAllByTestId("checkbox-item");
     fireEvent.click(items[1]);
@@ -155,7 +155,7 @@ describe('NavBar', () => {
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
-      selection={selection}
+      selection={{elements: selection}}
     />)
     const items = screen.getAllByTestId("checkbox-item");
     fireEvent.click(items[1]);
@@ -174,7 +174,7 @@ describe('NavBar', () => {
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
-      selection={selection}
+      selection={{elements: selection}}
       rowClick={rowClick}
     />)
     const items = screen.getAllByTestId("checkbox-item");
@@ -188,7 +188,7 @@ describe('NavBar', () => {
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
-      selection={selection}
+      selection={{elements: selection}}
     />)
     const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
     expect(items[1].checked).toBe(true);

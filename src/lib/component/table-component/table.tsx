@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 export type ColumnValues = string | ReactNode;
 
@@ -10,8 +10,10 @@ export interface ColumnDefinition<T> {
 export interface TableProps<T> {
     columns: ColumnDefinition<T>[];
     rows: T[];
-    selection?: React.MutableRefObject<T[]>;
-    invertSelection?: boolean;
+    selection?: {
+        elements: React.MutableRefObject<T[]>,
+        invert?: boolean;
+    },
     rowClick?: (row: T) => void;
 }
 
@@ -20,7 +22,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
     useEffect(() => {
         checkbox.current?.forEach(ref => {
             if (ref.current) {
-                (ref.current as HTMLInputElement).checked = selection?.current.includes(ref.el) ? true : false; 
+                (ref.current as HTMLInputElement).checked = selection?.elements.current.includes(ref.el) ? true : false; 
             }
         })
     })
@@ -29,7 +31,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
             <thead>
                 <tr>
                     {
-                        selection && (<td role="rowheader"><input data-testid="checkbox-all" type="checkbox" onChange={e => updateAllSelection(rows, selection, e.target.checked)}/></td>)
+                        selection && (<td role="rowheader"><input data-testid="checkbox-all" type="checkbox" onChange={e => updateAllSelection(rows, selection.elements, e.target.checked)}/></td>)
                     }
                     { columns.map(col => <td role="rowheader">{col.label}</td>) }
                 </tr>
@@ -39,7 +41,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
                     rows.map((row, i) => (
                         <tr key={i} role="listitem" onClick={() => rowClick(row)}>
                             {
-                                selection && checkbox.current && (<td role="rowheader"><input ref={checkbox.current[i]} data-testid="checkbox-item" type="checkbox" value="true" onChange={e => updateSelection(rows, selection, row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
+                                selection && checkbox.current && (<td role="rowheader"><input ref={checkbox.current[i]} data-testid="checkbox-item" type="checkbox" value="true" onChange={e => updateSelection(rows, selection.elements, row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
                             }
                             { columns.map(col => <td>{col.mapper(row)}</td>) }
                         </tr>
