@@ -4,7 +4,7 @@ import { ColumnDefinition, NavBar, Table } from './table';
 
 describe('Table', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Table columns={[]} rows={[]} />);
+    const { baseElement } = render(<Table getRowId={() => 0} columns={[]} rows={[]} />);
     expect(baseElement).toBeTruthy();
   });
 
@@ -23,7 +23,7 @@ describe('Table', () => {
 
     const rows: string[] = ["value_1", "value_2"];
 
-    render(<Table {...{columns, rows}} />);
+    render(<Table {...{columns, rows}} getRowId={r => r} />);
 
     const list = screen.getByRole("list");
     expect(list).toBeTruthy();
@@ -37,7 +37,7 @@ describe('Table', () => {
   });
   
   it('should render empy list', () => {
-    render(<Table columns={[]} rows={[]} />);
+    render(<Table columns={[]} rows={[]} getRowId={() => 0} />);
 
     const list = screen.getByRole("list");
     expect(list).toBeTruthy();
@@ -128,6 +128,7 @@ describe('NavBar', () => {
       columns={[]}
       selection={{elements: []}}
       rows={[{value: "v1"}]}
+      getRowId={r => r.value}
     />);
     screen.getByTestId("checkbox-all");
     screen.getByTestId("checkbox-item");
@@ -137,6 +138,7 @@ describe('NavBar', () => {
       columns={[]}
       rows={[]}
       selection={{elements: [], selectAll: true}}
+      getRowId={() => 0}
     />)
     const selectAll = (screen.getByTestId("checkbox-all")) as HTMLInputElement;
     expect(selectAll.checked).toBe(true);
@@ -146,6 +148,7 @@ describe('NavBar', () => {
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
+      getRowId={r => r} 
       selection={{elements: [], onSelectRow}}
     />)
     const items = screen.getAllByTestId("checkbox-item");
@@ -159,6 +162,7 @@ describe('NavBar', () => {
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
+      getRowId={r => r} 
       selection={{elements: ["B"], onSelectAll}}
     />)
     fireEvent.click(screen.getByTestId("checkbox-all"));
@@ -169,6 +173,7 @@ describe('NavBar', () => {
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
+      getRowId={r => r} 
       selection={{elements: []}}
       rowClick={rowClick}
     />)
@@ -180,6 +185,7 @@ describe('NavBar', () => {
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
+      getRowId={r => r} 
       selection={{elements: ["B"]}}
     />)
     const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
@@ -189,6 +195,7 @@ describe('NavBar', () => {
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
+      getRowId={r => r} 
       selection={{elements: ["B"], selectAll: true, invert: true}}
     />)
     const selectAll = (screen.getByTestId("checkbox-all")) as HTMLInputElement;

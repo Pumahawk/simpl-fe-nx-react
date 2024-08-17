@@ -10,6 +10,7 @@ export interface ColumnDefinition<T> {
 export interface TableProps<T> {
     columns: ColumnDefinition<T>[];
     rows: T[];
+    getRowId: (element: T) => string | number;
     selection?: {
         elements: T[]
         invert?: boolean;
@@ -20,7 +21,7 @@ export interface TableProps<T> {
     rowClick?: (row: T) => void;
 }
 
-export function Table<T>({columns, rows, selection, rowClick = () => {return}}: TableProps<T>) {
+export function Table<T>({columns, rows, getRowId, selection, rowClick = () => {return}}: TableProps<T>) {
     function checkedRow(row: T): boolean {
         if (selection) {
             const include = selection.elements.includes(row);
@@ -36,7 +37,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
                     {
                         selection && (<td role="rowheader"><input data-testid="checkbox-all" type="checkbox" checked={selection.selectAll} onChange={e => selection.onSelectAll && selection.onSelectAll(e.target.checked)}/></td>)
                     }
-                    { columns.map(col => <td role="rowheader">{col.label}</td>) }
+                    { columns.map(col => <td role="rowheader" key={col.label}>{col.label}</td>) }
                 </tr>
             </thead>
             <tbody role="list">
@@ -46,7 +47,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
                             {
                                 selection && (<td role="rowheader"><input data-testid="checkbox-item" type="checkbox" data-element={row} checked={checkedRow(row)} onChange={e => selection.onSelectRow && selection.onSelectRow(row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
                             }
-                            { columns.map(col => <td>{col.mapper(row)}</td>) }
+                            { columns.map(col => <td key={getRowId(row)}>{col.mapper(row)}</td>) }
                         </tr>
                     ))
                 }
@@ -63,6 +64,7 @@ export function PaginatedTable<T>({
     // Table props
     columns,
     rows,
+    getRowId,
     rowClick = () => {return},
 
     // NavBar props
@@ -76,7 +78,7 @@ export function PaginatedTable<T>({
 }: PaginatedTableProps<T>): ReactNode {
     return (
         <>
-            <Table {...{columns, rowClick, rows}} />
+            <Table {...{columns, rowClick, rows, getRowId}} />
             <NavBar {...{options, page, size, onPageChange, onSizeChange, totalPages}}/>
         </>
     );
