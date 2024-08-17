@@ -157,12 +157,13 @@ describe('NavBar', () => {
       rows={["A", "B", "C", "D"]}
       selection={{elements: selection}}
     />)
-    const items = screen.getAllByTestId("checkbox-item");
+    const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
     fireEvent.click(items[1]);
     fireEvent.click(items[3]);
     expect(selection.current).toStrictEqual(["B", "D"]);
     fireEvent.click(screen.getByTestId("checkbox-all"));
     expect(selection.current).toStrictEqual(["A", "B", "C", "D"]);
+    expect(items.filter(el => el.checked).map(el => el.dataset.element)).toStrictEqual(["A", "B", "C", "D"])
     fireEvent.click(screen.getByTestId("checkbox-all"));
     expect(selection.current).toStrictEqual([]);
   })
@@ -216,12 +217,13 @@ describe('NavBar', () => {
       rows={["A", "B", "C", "D"]}
       selection={{elements: selection, invert: true}}
     />)
-    const items = screen.getAllByTestId("checkbox-item");
+    const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
     fireEvent.click(items[1]);
     fireEvent.click(items[3]);
     expect(selection.current).toStrictEqual(["B", "D"]);
     fireEvent.click(screen.getByTestId("checkbox-all"));
     expect(selection.current).toStrictEqual(["A", "B", "C", "D"]);
+    expect(items.filter(el => !el.checked).map(el => el.dataset.element)).toStrictEqual(["A", "B", "C", "D"])
     fireEvent.click(screen.getByTestId("checkbox-all"));
     expect(selection.current).toStrictEqual([]);
   })

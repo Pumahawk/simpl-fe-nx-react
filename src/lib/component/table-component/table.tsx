@@ -18,7 +18,7 @@ export interface TableProps<T> {
 }
 
 export function Table<T>({columns, rows, selection, rowClick = () => {return}}: TableProps<T>) {
-    const render = useState()[1];
+    const render = useState(0)[1];
     
     const selectAllCheckbox = useRef(null);
     const checkbox = useRef(rows.map(row => ({el: row, current: null})));
@@ -39,7 +39,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
             <thead>
                 <tr>
                     {
-                        selection && (<td role="rowheader"><input ref={selectAllCheckbox} data-testid="checkbox-all" type="checkbox" onChange={e => {updateAllSelection(rows, selection.elements, selection.invert || false, e.target.checked); render(undefined);}}/></td>)
+                        selection && (<td role="rowheader"><input ref={selectAllCheckbox} data-testid="checkbox-all" type="checkbox" onChange={e => {updateAllSelection(rows, selection.elements, selection.invert || false, e.target.checked); render(n => n + 1);}}/></td>)
                     }
                     { columns.map(col => <td role="rowheader">{col.label}</td>) }
                 </tr>
