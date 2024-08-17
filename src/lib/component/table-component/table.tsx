@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 export type ColumnValues = string | ReactNode;
 
@@ -18,28 +18,20 @@ export interface TableProps<T> {
 }
 
 export function Table<T>({columns, rows, selection, rowClick = () => {return}}: TableProps<T>) {
-    const render = useState(0)[1];
-    
     const selectAllCheckbox = useRef(null);
     const checkbox = useRef(rows.map(row => ({el: row, current: null})));
     useEffect(() => {
         if (selection && selection.invert && selectAllCheckbox.current) {
             (selectAllCheckbox.current as HTMLInputElement).checked = true;
         }
-    }, [selection])
-    useEffect(() => {
-        checkbox.current?.forEach(ref => {
-            if (ref.current) {
-                (ref.current as HTMLInputElement).checked = selection?.elements.current.includes(ref.el) ? !selection.invert : !!selection?.invert;
-            }
-        })
-    })
+    }, [selection]);
+    useEffect(() => updateCheckBoxWithSelected(checkbox, selection), [selection]);
     return (
         <table className="table table-hover">
             <thead>
                 <tr>
                     {
-                        selection && (<td role="rowheader"><input ref={selectAllCheckbox} data-testid="checkbox-all" type="checkbox" onChange={e => {updateAllSelection(rows, selection.elements, selection.invert || false, e.target.checked); render(n => n + 1);}}/></td>)
+                        selection && (<td role="rowheader"><input ref={selectAllCheckbox} data-testid="checkbox-all" type="checkbox" onChange={e => {updateAllSelection(rows, selection.elements, selection.invert || false, e.target.checked); updateCheckBoxWithSelected(checkbox, selection);}}/></td>)
                     }
                     { columns.map(col => <td role="rowheader">{col.label}</td>) }
                 </tr>
@@ -116,4 +108,22 @@ function updateSelection<T>(elements: React.MutableRefObject<T[]>, invert: boole
     elements.current = (invert ? !add : add)
         ? elements.current.concat([row])
         : elements.current.filter(r => r !== row);
+}
+
+
+function updateCheckBoxWithSelected<T>(
+    checkbox: React.MutableRefObject<{
+            el: T;
+            current: null;
+        }[]>,
+    selection: {
+        elements: React.MutableRefObject<T[]>;
+        invert?: boolean;
+    } | undefined
+) {
+    checkbox.current?.forEach(ref => {
+        if (ref.current) {
+            (ref.current as HTMLInputElement).checked = selection?.elements.current.includes(ref.el) ? !selection.invert : !!selection?.invert;
+        }
+    })
 }
