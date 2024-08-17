@@ -177,8 +177,8 @@ describe('NavBar', () => {
       selection={{elements: selection}}
       rowClick={rowClick}
     />)
-    const items = screen.getAllByTestId("checkbox-item");
-    fireEvent.click(items[1]);
+    fireEvent.click(screen.getAllByTestId("checkbox-item")[1]);
+    fireEvent.click(screen.getByTestId("checkbox-all"));
     expect(rowClick).toBeCalledTimes(0);
   })
   it('should select box on render', () => {
