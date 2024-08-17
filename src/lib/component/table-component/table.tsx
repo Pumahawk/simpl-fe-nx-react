@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode } from "react";
 
 export type ColumnValues = string | ReactNode;
 
@@ -11,27 +11,30 @@ export interface TableProps<T> {
     columns: ColumnDefinition<T>[];
     rows: T[];
     selection?: {
-        elements: React.MutableRefObject<T[]>,
+        elements: T[]
         invert?: boolean;
+        selectAll?: boolean
+        onSelectAll?: (checked: boolean) => void;
+        onSelectRow?: (row: T, checked: boolean) => void;
     },
     rowClick?: (row: T) => void;
 }
 
 export function Table<T>({columns, rows, selection, rowClick = () => {return}}: TableProps<T>) {
-    const selectAllCheckbox = useRef(null);
-    const checkbox = useRef(rows.map(row => ({el: row, current: null})));
-    useEffect(() => {
-        if (selection && selection.invert && selectAllCheckbox.current) {
-            (selectAllCheckbox.current as HTMLInputElement).checked = true;
+    function checkedRow(row: T): boolean {
+        if (selection) {
+            const include = selection.elements.includes(row);
+            return selection.invert ? !include : include;
+        } else {
+            return false;
         }
-    }, [selection]);
-    useEffect(() => updateCheckBoxWithSelected(checkbox, selection), [selection]);
+    }
     return (
         <table className="table table-hover">
             <thead>
                 <tr>
                     {
-                        selection && (<td role="rowheader"><input ref={selectAllCheckbox} data-testid="checkbox-all" type="checkbox" onChange={e => {updateAllSelection(rows, selection.elements, selection.invert || false, e.target.checked); updateCheckBoxWithSelected(checkbox, selection);}}/></td>)
+                        selection && (<td role="rowheader"><input data-testid="checkbox-all" type="checkbox" checked={selection.selectAll} onChange={e => selection.onSelectAll && selection.onSelectAll(e.target.checked)}/></td>)
                     }
                     { columns.map(col => <td role="rowheader">{col.label}</td>) }
                 </tr>
@@ -41,7 +44,7 @@ export function Table<T>({columns, rows, selection, rowClick = () => {return}}: 
                     rows.map((row, i) => (
                         <tr key={i} role="listitem" onClick={() => rowClick(row)}>
                             {
-                                selection && checkbox.current && (<td role="rowheader"><input ref={checkbox.current[i]} data-testid="checkbox-item" type="checkbox" data-element={row} onChange={e => updateSelection(selection.elements, selection.invert || false, row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
+                                selection && (<td role="rowheader"><input data-testid="checkbox-item" type="checkbox" data-element={row} checked={checkedRow(row)} onChange={e => selection.onSelectRow && selection.onSelectRow(row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
                             }
                             { columns.map(col => <td>{col.mapper(row)}</td>) }
                         </tr>
@@ -98,32 +101,4 @@ export function NavBar({page, totalPages, size, options, onPageChange = () => {r
             </select>
         </div>
     )
-}
-
-function updateAllSelection<T>(rows: T[], elements: React.MutableRefObject<T[]>, invert: boolean, add: boolean) {
-    elements.current = (invert ? !add : add) ? rows.concat() : [];
-}
-
-function updateSelection<T>(elements: React.MutableRefObject<T[]>, invert: boolean, row: T, add: boolean) {
-    elements.current = (invert ? !add : add)
-        ? elements.current.concat([row])
-        : elements.current.filter(r => r !== row);
-}
-
-
-function updateCheckBoxWithSelected<T>(
-    checkbox: React.MutableRefObject<{
-            el: T;
-            current: null;
-        }[]>,
-    selection: {
-        elements: React.MutableRefObject<T[]>;
-        invert?: boolean;
-    } | undefined
-) {
-    checkbox.current?.forEach(ref => {
-        if (ref.current) {
-            (ref.current as HTMLInputElement).checked = selection?.elements.current.includes(ref.el) ? !selection.invert : !!selection?.invert;
-        }
-    })
 }

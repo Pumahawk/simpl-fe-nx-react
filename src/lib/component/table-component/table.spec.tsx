@@ -126,56 +126,50 @@ describe('NavBar', () => {
   it('should show checkbox', () => {
     render(<Table
       columns={[]}
-      selection={{elements: {current: []}}}
+      selection={{elements: []}}
       rows={[{value: "v1"}]}
     />);
     screen.getByTestId("checkbox-all");
     screen.getByTestId("checkbox-item");
   })
+  it('should check select all property', () => {
+    render(<Table
+      columns={[]}
+      rows={[]}
+      selection={{elements: [], selectAll: true}}
+    />)
+    const selectAll = (screen.getByTestId("checkbox-all")) as HTMLInputElement;
+    expect(selectAll.checked).toBe(true);
+  })
   it('should select and deselect some row', () => {
-    const selection = {
-      current: []
-    }
+    const onSelectRow = vi.fn();
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
-      selection={{elements: selection}}
+      selection={{elements: [], onSelectRow}}
     />)
     const items = screen.getAllByTestId("checkbox-item");
     fireEvent.click(items[1]);
+    expect(onSelectRow).lastCalledWith("B", true);
     fireEvent.click(items[3]);
-    expect(selection.current).toStrictEqual(["B", "D"]);
-    fireEvent.click(items[1]);
-    expect(selection.current).toStrictEqual(["D"]);
+    expect(onSelectRow).lastCalledWith("D", true);
   })
   it('should select and deselect all rows', () => {
-    const selection = {
-      current: []
-    }
+    const onSelectAll = vi.fn();
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
-      selection={{elements: selection}}
+      selection={{elements: ["B"], onSelectAll}}
     />)
-    const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
-    fireEvent.click(items[1]);
-    fireEvent.click(items[3]);
-    expect(selection.current).toStrictEqual(["B", "D"]);
     fireEvent.click(screen.getByTestId("checkbox-all"));
-    expect(selection.current).toStrictEqual(["A", "B", "C", "D"]);
-    expect(items.filter(el => el.checked).map(el => el.dataset.element)).toStrictEqual(["A", "B", "C", "D"])
-    fireEvent.click(screen.getByTestId("checkbox-all"));
-    expect(selection.current).toStrictEqual([]);
+    expect(onSelectAll).lastCalledWith(true);
   })
   it('should not fire rowClick on checkbox', () => {
     const rowClick = vi.fn();
-    const selection = {
-      current: []
-    }
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
-      selection={{elements: selection}}
+      selection={{elements: []}}
       rowClick={rowClick}
     />)
     fireEvent.click(screen.getAllByTestId("checkbox-item")[1]);
@@ -183,48 +177,23 @@ describe('NavBar', () => {
     expect(rowClick).toBeCalledTimes(0);
   })
   it('should select box on render', () => {
-    const selection = {
-      current: ["B"]
-    }
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
-      selection={{elements: selection}}
+      selection={{elements: ["B"]}}
     />)
     const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
     expect(items[1].checked).toBe(true);
   })
   it('should respect invert property on render', () => {
-    const selection = {
-      current: ["B"]
-    }
     render(<Table
       columns={[]}
       rows={["A", "B", "C", "D"]}
-      selection={{elements: selection, invert: true}}
+      selection={{elements: ["B"], selectAll: true, invert: true}}
     />)
     const selectAll = (screen.getByTestId("checkbox-all")) as HTMLInputElement;
     expect(selectAll.checked).toBe(true);
     const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
     expect(items.filter(item => item.checked).map(el => el.dataset.element)).toStrictEqual(["A", "C", "D"]);
-  })
-  it('should select and deselect all rows on invert', () => {
-    const selection = {
-      current: []
-    }
-    render(<Table
-      columns={[]}
-      rows={["A", "B", "C", "D"]}
-      selection={{elements: selection, invert: true}}
-    />)
-    const items = screen.getAllByTestId("checkbox-item") as HTMLInputElement[];
-    fireEvent.click(items[1]);
-    fireEvent.click(items[3]);
-    expect(selection.current).toStrictEqual(["B", "D"]);
-    fireEvent.click(screen.getByTestId("checkbox-all"));
-    expect(selection.current).toStrictEqual(["A", "B", "C", "D"]);
-    expect(items.filter(el => !el.checked).map(el => el.dataset.element)).toStrictEqual(["A", "B", "C", "D"])
-    fireEvent.click(screen.getByTestId("checkbox-all"));
-    expect(selection.current).toStrictEqual([]);
   })
 })
