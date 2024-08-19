@@ -6,10 +6,22 @@
 
 @layer components {
     h1 {
-        @apply text-4xl text-primary-light font-semibold;
+        @apply text-4xl text-primary-950 font-semibold;
     }
 
     .list-group-item {
         @apply block w-full p-2 border-x border-b first:border-t first:rounded-t-lg last:rounded-b-lg border-slate-300;
+    }
+
+    .btn {
+        @apply p-2 rounded-full transition duration-300;
+    }
+
+    .btn-primary {
+        @apply bg-primary-900 text-white hover:bg-primary-950;
+    }
+
+    .btn-secondary {
+        @apply bg-secondary-200 hover:bg-secondary-300;
     }
 }
