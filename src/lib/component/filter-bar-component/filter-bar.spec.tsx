@@ -25,10 +25,10 @@ describe('FilterBar', () => {
     }
     render(<FilterBar filters={filters}/>)
     const select = screen.getByTestId("filters-list");
-    expect(screen.getAllByTestId("filters-list-element").length).toBe(3);
+    expect(screen.getAllByTestId("filters-list-element").length).toBe(2);
     const options = screen.getAllByTestId("filters-element");
 
-    expect(options[0].hidden).toBeTruthy();
+    expect(options[0].hidden).toBeFalsy();
     expect(options[1].hidden).toBeTruthy();
 
     fireEvent.change(select, {
