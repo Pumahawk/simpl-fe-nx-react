@@ -1,7 +1,8 @@
 import React, { MutableRefObject, ReactNode } from "react";
 
 export interface Filter<T> {
-  getValue(): T;
+  getValue(): T | undefined;
+  reset(): void;
   render(key?: React.Key): ReactNode;
 }
 
@@ -19,12 +20,14 @@ export class TextFilter implements Filter<string> {
     this._label = label;
   }
 
-  getValue(): string {
-    if (this._input.current?.value == null) {
-      throw new Error("Invalid implementation of TextFilter");
-    } else {
-      return this._input.current.value;
-    }
+  getValue(): string | undefined {
+    return this._input.current?.value;
+  }
+
+  reset(): void {
+      if (this._input.current !== null) {
+        this._input.current.value = '';
+      }
   }
 
   render(key?: React.Key): ReactNode {
@@ -40,9 +43,9 @@ interface TextFilterComponentProp {
 }
 function TextFilterComponent({name, label, inputRef}: TextFilterComponentProp) {
   return (
-    <div>
-      <label data-testid="label">{label}</label>
-      <input name={name} data-testid="input" ref={inputRef} type="text"/>
+    <div className="py-2">
+      <label className="form-label" data-testid="label">{label}</label>
+      <input className="form-control" name={name} data-testid="input" ref={inputRef} type="text"/>
     </div>
   );
 }

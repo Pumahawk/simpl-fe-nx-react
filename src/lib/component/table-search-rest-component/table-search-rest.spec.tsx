@@ -64,11 +64,13 @@ describe('TableSearchRest', () => {
     vi.mocked(FilterBar).mockImplementation(arg => <MockFilterBar {...{...arg, onSubmitArg: {
       name: {
         getValue: () => "my name",
-        render: () => <span>filter name</span>
+        render: () => <span>filter name</span>,
+        reset: () => {return},
       },
       age: {
         getValue: () => 10,
-        render: () => <span>filter age</span>
+        render: () => <span>filter age</span>,
+        reset: () => {return},
       }
     }}}/>)
     vi.mocked(PaginatedTable).mockReturnValue(<div>MockPaginatedTable</div>);
@@ -97,11 +99,13 @@ describe('TableSearchRest', () => {
         filters: {
           name: {
             getValue: () => "my name",
-            render: () => <span>filter name</span>
+            render: () => <span>filter name</span>,
+            reset: () => {return},
           },
           age: {
             getValue: () => 10,
-            render: () => <span>filter age</span>
+            render: () => <span>filter age</span>,
+            reset: () => {return},
           }
         }
       }}

@@ -35,4 +35,31 @@ describe('TextFilter', () => {
 
     getByText(screen.getByTestId('label'), 'Test label');
   })
+  it('should return value without render', () => {
+    const ts = new TextFilter({
+      label: "name",
+      name: "name",
+    })
+    expect(ts.getValue()).toBeUndefined();
+  })
+  it('should reset value', () => {
+    const ts = new TextFilter({
+      label: "name",
+      name: "name",
+    });
+    ts.reset();
+    expect(ts.getValue()).toBeUndefined();
+    render(ts.render());
+    expect(ts.getValue()).toBe("");
+    const input = screen.getByTestId("input") as HTMLInputElement;
+    fireEvent.change(input, {
+      target: {
+        value: "Update value",
+      }
+    });
+    expect(ts.getValue()).toBe("Update value");
+    ts.reset();
+    expect(ts.getValue()).toBe("");
+    expect((screen.getByTestId("input") as HTMLInputElement).value).toBe("");
+  })
 });

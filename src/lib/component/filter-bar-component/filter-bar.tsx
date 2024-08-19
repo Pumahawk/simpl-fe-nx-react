@@ -14,7 +14,7 @@ export function FilterBar<T extends FilterBar>({filters, onSubmit = () => {retur
   return (
     <form data-testid="filters-form" onSubmit={e => {e.preventDefault();onSubmit(filters)}}>
       <div>
-        <select data-testid="filters-list" value={selected} onChange={(el) => setSelected(parseInt(el.target.value))}>
+        <select className='form-select' data-testid="filters-list" value={selected} onChange={(el) => setSelected(parseInt(el.target.value))}>
           { selected === -1  && <option data-testid="filters-list-element" value="-1">None</option> }
           { Object.entries(filters).map(([name, f], i) => (<option data-testid="filters-list-element" key={i} value={i}>{name}</option>)) }
         </select>
@@ -26,8 +26,9 @@ export function FilterBar<T extends FilterBar>({filters, onSubmit = () => {retur
           ))
         }
       </div>
-      <div>
-        <button>Submit</button>
+      <div className='mt-2'>
+        <button type='submit' className='btn btn-primary'>Search</button>
+        <button type='button' className='btn btn-secondary ms-2'>Rest</button>
       </div>
     </form>
   );
