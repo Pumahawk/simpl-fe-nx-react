@@ -28,7 +28,7 @@ export function authPage(
   dataFn: () => any
 ) {
   const data: DeferredPageData = {
-    single: auth(args, config).then(() => dataFn(args)),
+    single: auth(args, config).then(() => dataFn()),
   };
   return defer(data);
 }
