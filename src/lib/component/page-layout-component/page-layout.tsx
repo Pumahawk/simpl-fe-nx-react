@@ -10,28 +10,18 @@ export interface PageLayoutProps {
 
 export interface DeferredPageLayoutProps {
     title?: string;
-    children: (data: any) => ReactNode;
+    children: (data: unknown) => ReactNode;
     deferred?: string;
 }
 
 export default function PageLayout({title, children}: PageLayoutProps) {
     return (
-        <div className="container">
-            <div className="row justify-content-center align-items-center min-vh-100">
-                <div className="col">
-                    {
-                        title && (
-                            <div className="row  text-break">
-                                <h1 className="text-primary">{title}</h1>
-                            </div>
-                        )
-                    }
-                    <div className="row">
-                        <div className="col-12">
-                            {children}
-                        </div>
-                    </div>
-                </div>
+        <div className="flex h-screen">
+            <div className="container m-auto min-h-96">
+            {
+                title && <h1 className="pb-4">{title}</h1>
+            }
+            {children}
             </div>
         </div>
     )

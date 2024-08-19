@@ -3,3 +3,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    h1 {
+        @apply text-4xl text-primary-light font-semibold;
+    }
+
+    .list-group-item {
+        @apply block w-full p-2 border-x border-b first:border-t first:rounded-t-lg last:rounded-b-lg border-slate-300;
+    }
+}

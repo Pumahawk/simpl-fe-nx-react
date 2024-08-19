@@ -12,9 +12,9 @@ export default function HomePage() {
 
     return (
         <PageLayout title="Home">
-            <div className="list-group">
+            <div>
                 {
-                    links.map((address, i) => <Link key={i} className="list-group-item list-group-item-action" to={address}>{address}</Link>)
+                    links.map((address) => <Link key={address} className="list-group-item cursor-pointer hover:bg-slate-100" to={address}>{address}</Link>)
                 }
             </div>
         </PageLayout>
