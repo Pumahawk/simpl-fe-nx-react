@@ -19,6 +19,7 @@ describe('TableSearchRest', () => {
         filterBar={{filters: {}}}
         initSize={10}
         paginatedTable={{
+          getRowId: () => "",
           columns: [],
           options: [10],
         }}
@@ -48,6 +49,7 @@ describe('TableSearchRest', () => {
         filterBar={{filters: {}}}
         initSize={10}
         paginatedTable={{
+          getRowId: () => "",
           columns: [],
           options: [10],
         }}
@@ -104,6 +106,7 @@ describe('TableSearchRest', () => {
         }
       }}
       paginatedTable={{
+        getRowId: () => "",
         columns: [
           {
             label: "Name",
