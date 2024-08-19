@@ -57,7 +57,7 @@ function searchAPI(arg: FetchArgs<IdentityAttributePageFilters>): Promise<PagedM
             page: arg.page,
             size: arg.size,
         },
-        ...(arg.filters?.name.getValue() ? {code: arg.filters.name.getValue()} : {}),
+        ...(arg.filters?.name.getValue() ? {name: arg.filters.name.getValue()} : {}),
         ...(arg.filters?.code.getValue() ? {code: arg.filters.code.getValue()} : {}),
     })
 }

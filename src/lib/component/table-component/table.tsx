@@ -43,11 +43,11 @@ export function Table<T>({columns, rows, getRowId, selection, rowClick = () => {
             <tbody role="list">
                 { 
                     rows.map((row, i) => (
-                        <tr key={i} role="listitem" onClick={() => rowClick(row)}>
+                        <tr key={getRowId(row)} role="listitem" onClick={() => rowClick(row)}>
                             {
                                 selection && (<td role="rowheader"><input data-testid="checkbox-item" type="checkbox" data-element={row} checked={checkedRow(row)} onChange={e => selection.onSelectRow && selection.onSelectRow(row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
                             }
-                            { columns.map(col => <td key={getRowId(row)}>{col.mapper(row)}</td>) }
+                            { columns.map(col => <td>{col.mapper(row)}</td>) }
                         </tr>
                     ))
                 }
