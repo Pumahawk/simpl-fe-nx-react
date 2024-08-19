@@ -31,7 +31,7 @@ export function Table<T>({columns, rows, getRowId, selection, rowClick = () => {
         }
     }
     return (
-        <table className="table table-hover">
+        <table className="table-auto text-nowrap">
             <thead>
                 <tr>
                     {
@@ -78,7 +78,9 @@ export function PaginatedTable<T>({
 }: PaginatedTableProps<T>): ReactNode {
     return (
         <>
-            <Table {...{columns, rowClick, rows, getRowId}} />
+            <div className="mb-4">
+                <Table {...{columns, rowClick, rows, getRowId}} />
+            </div>
             <NavBar {...{options, page, size, onPageChange, onSizeChange, totalPages}}/>
         </>
     );

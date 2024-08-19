@@ -41,7 +41,7 @@ export function TableSearchRest<DataType, FilterType extends FilterBar>({search,
   const Render = usePromiseComponent(searchAPI, dataset => {
     setSize(dataset.page.size);
     return (
-      <div data-testid="table-search-rest">
+      <div className={paginatedTable.rowClick ? "table-action" : ""} data-testid="table-search-rest">
         <PaginatedTable
           {...paginatedTable}
           page={dataset.page.number}
@@ -67,11 +67,13 @@ export function TableSearchRest<DataType, FilterType extends FilterBar>({search,
     <div>
       {
         filterBar && 
-        <FilterBar {...filterBar} onSubmit={(filters) => setSearchAPI(() => () => search({
-          filters: filters,
-          page: 0,
-          size,
-        }))}/>
+        <div className='mb-3'>
+          <FilterBar {...filterBar} onSubmit={(filters) => setSearchAPI(() => () => search({
+            filters: filters,
+            page: 0,
+            size,
+          }))}/>
+        </div>
       }
       <Suspense fallback={fallback}>
         <Render/>

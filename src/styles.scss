@@ -5,6 +5,11 @@
 @tailwind utilities;
 
 @layer components {
+
+    body {
+        @pply font-sans;
+    }
+
     h1 {
         @apply text-4xl text-primary-950 font-semibold;
     }
@@ -14,7 +19,7 @@
     }
 
     .btn {
-        @apply p-2 rounded-full transition duration-300;
+        @apply p-2 rounded-lg transition duration-300;
     }
 
     .btn-primary {
@@ -23,5 +28,27 @@
 
     .btn-secondary {
         @apply bg-secondary-200 hover:bg-secondary-300;
+    }
+
+    .table-action {
+        tbody tr {
+            @apply cursor-pointer hover:bg-slate-50;
+        }
+    }
+
+    table {
+        @apply w-full font-sans border-y rounded-lg;
+
+        thead {
+            @apply font-medium border-b bg-slate-100;
+        }
+
+        tr {
+            @apply border-x border-b first:border-t-0 last:border-b-0 border-slate-300;
+        }
+
+        td {
+            @apply p-2 min-w-min;
+        }
     }
 }
