@@ -44,8 +44,8 @@ interface TextFilterComponentProp {
 function TextFilterComponent({name, label, inputRef}: TextFilterComponentProp) {
   return (
     <div className="py-2">
-      <label className="form-label" data-testid="label">{label}</label>
-      <input className="form-control" name={name} data-testid="input" ref={inputRef} type="text"/>
+      <label className="w-full" data-testid="label">{label}</label>
+      <input className="w-full border rounded-md border-slate-300 p-2" name={name} data-testid="input" ref={inputRef} type="text"/>
     </div>
   );
 }

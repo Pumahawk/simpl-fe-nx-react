@@ -24,7 +24,7 @@ export function FilterBar<T extends FilterBar>({filters, onSubmit = () => {retur
         <summary>Filters {filterActives > 0 && filterActives}</summary>
         <div className='md:absolute md:-bottom-100 md:bg-white md:w-1/3 md:shadow-md md:rounded md:p-3 md:z-10'>
           <div>
-            <select className='form-select' data-testid="filters-list" value={selected} onChange={(el) => setSelected(parseInt(el.target.value))}>
+            <select className='w-full border rounded-md border-slate-300 p-2' data-testid="filters-list" value={selected} onChange={(el) => setSelected(parseInt(el.target.value))}>
               { Object.entries(filters).map(([name, f], i) => (<option data-testid="filters-list-element" key={i} value={i}>{name}</option>)) }
             </select>
           </div>
