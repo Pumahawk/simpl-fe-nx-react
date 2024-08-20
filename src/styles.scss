@@ -23,11 +23,11 @@
     }
 
     .btn-primary {
-        @apply bg-primary-900 text-white hover:bg-primary-950;
+        @apply bg-primary-900 text-white hover:bg-primary-950 disabled:bg-primary-100;
     }
 
     .btn-secondary {
-        @apply bg-secondary-200 hover:bg-secondary-300;
+        @apply bg-secondary-200 hover:bg-secondary-400 disabled:bg-gray-50 hover:disabled:bg-gray-50;
     }
 
     .table-action {
