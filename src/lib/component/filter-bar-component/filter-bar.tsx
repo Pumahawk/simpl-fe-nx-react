@@ -35,7 +35,7 @@ export function FilterBar<T extends FilterBar>({filters, onSubmit = () => {retur
               ))
             }
           </div>
-          <div className='mt-2'>
+          <div className='mt-2 text-center md:text-left'>
             <button type='submit' className='btn btn-primary'>Search</button>
             <button type='button' className='btn btn-secondary ms-2' onClick={() => handleReset()}>Reset</button>
           </div>

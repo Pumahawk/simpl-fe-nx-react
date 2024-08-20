@@ -17,7 +17,7 @@ export interface DeferredPageLayoutProps {
 export default function PageLayout({title, children}: PageLayoutProps) {
     return (
         <div className="flex h-screen">
-            <div className="container m-auto min-h-96">
+            <div className="container p-2 m-auto min-h-96">
             {
                 title && <h1 className="pb-4">{title}</h1>
             }

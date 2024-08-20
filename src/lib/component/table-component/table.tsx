@@ -31,28 +31,30 @@ export function Table<T>({columns, rows, getRowId, selection, rowClick = () => {
         }
     }
     return (
-        <table className="table-auto text-nowrap">
-            <thead>
-                <tr>
-                    {
-                        selection && (<td role="rowheader"><input data-testid="checkbox-all" type="checkbox" checked={selection.selectAll} onChange={e => selection.onSelectAll && selection.onSelectAll(e.target.checked)}/></td>)
+        <div className="overflow-x-auto">
+            <table className="table-auto text-nowrap">
+                <thead>
+                    <tr>
+                        {
+                            selection && (<td role="rowheader"><input data-testid="checkbox-all" type="checkbox" checked={selection.selectAll} onChange={e => selection.onSelectAll && selection.onSelectAll(e.target.checked)}/></td>)
+                        }
+                        { columns.map(col => <td role="rowheader" key={col.label}>{col.label}</td>) }
+                    </tr>
+                </thead>
+                <tbody role="list">
+                    { 
+                        rows.map((row, i) => (
+                            <tr key={getRowId(row)} role="listitem" onClick={() => rowClick(row)}>
+                                {
+                                    selection && (<td role="rowheader"><input data-testid="checkbox-item" type="checkbox" data-element={row} checked={checkedRow(row)} onChange={e => selection.onSelectRow && selection.onSelectRow(row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
+                                }
+                                { columns.map(col => <td>{col.mapper(row)}</td>) }
+                            </tr>
+                        ))
                     }
-                    { columns.map(col => <td role="rowheader" key={col.label}>{col.label}</td>) }
-                </tr>
-            </thead>
-            <tbody role="list">
-                { 
-                    rows.map((row, i) => (
-                        <tr key={getRowId(row)} role="listitem" onClick={() => rowClick(row)}>
-                            {
-                                selection && (<td role="rowheader"><input data-testid="checkbox-item" type="checkbox" data-element={row} checked={checkedRow(row)} onChange={e => selection.onSelectRow && selection.onSelectRow(row, e.target.checked)} onClick={e => e.stopPropagation()}/></td>)
-                            }
-                            { columns.map(col => <td>{col.mapper(row)}</td>) }
-                        </tr>
-                    ))
-                }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     )
 }
 
