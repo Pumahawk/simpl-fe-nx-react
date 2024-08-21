@@ -8,6 +8,8 @@ export default function HomePage() {
     const links = [
         "/identity-attributes",
         "/participant-types",
+        "/application/info",
+        "/application/request",
     ]
 
     return (

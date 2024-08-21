@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
+import { Input } from './form-inputs';
 
-import FormInputs from './form-inputs';
 
 describe('FormInputs', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<FormInputs />);
+    const { baseElement } = render(<Input id='id' label='label' name='name' />);
     expect(baseElement).toBeTruthy();
   });
 });
