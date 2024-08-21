@@ -6,6 +6,7 @@ import IdentityAttributePage from "./pages/identity-attribute-page/identity-attr
 import IdentityAttributeDetailsPage from "./pages/identity-attribute-details-page/identity-attribute-details";
 import ParticipantTypesPage from "./pages/participant-types-page/participant-types";
 import ApplicationInfo from "./pages/application-info-page/application-info";
+import ApplicationRequest from "./pages/application-request-page/application-request";
 
 export default createBrowserRouter([
     {
@@ -33,5 +34,9 @@ export default createBrowserRouter([
     {
         path: "/application/info",
         element: <ApplicationInfo/>,
+    },
+    {
+        path: "/application/request",
+        element: <ApplicationRequest/>,
     }
 ]);
