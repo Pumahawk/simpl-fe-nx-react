@@ -99,9 +99,13 @@ export interface NavBarProps {
 
 export function NavBar({page, totalPages, size, options, onPageChange = () => {return}, onSizeChange = () => {return}}: NavBarProps) {
     return (
-        <div>
-            <button disabled={page - 1 < 0} data-testid="page-previus" className="btn btn-secondary me-2" onClick={() => onPageChange(page - 1)}>-</button>
-            <button disabled={totalPages ? page + 1 >= totalPages : false} data-testid="page-next" className="btn btn-secondary me-2" onClick={() => onPageChange(page + 1)}>+</button>
+        <div className="flex">
+            <button disabled={page - 1 < 0} data-testid="page-previus" className="btn btn-secondary p-1 me-2 flex" onClick={() => onPageChange(page - 1)}>
+                <span className="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button disabled={totalPages ? page + 1 >= totalPages : false} data-testid="page-next" className="btn btn-secondary p-1 me-2 flex" onClick={() => onPageChange(page + 1)}>
+                <span className="material-symbols-outlined">chevron_right</span>
+            </button>
             <select data-testid="size-box" onChange={(event) => onSizeChange(parseInt(event.target.value))} value={size}>
                 { options.map(opt => (<option data-testid="size-option" value={opt}>{opt}</option>)) }
             </select>
