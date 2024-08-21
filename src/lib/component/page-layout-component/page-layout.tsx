@@ -14,6 +14,23 @@ export interface DeferredPageLayoutProps {
     deferred?: string;
 }
 
+export interface CenterPageLayoutProps{
+    title: string;
+    children: ReactNode;
+}
+export function CenterPageLayout({title, children}: CenterPageLayoutProps) {
+    return (
+        <div className="flex h-screen font-sans">
+            <div className="p-2 m-auto min-h-96 md:w-1/3">
+            {
+                title && <h1 className="pb-4">{title}</h1>
+            }
+            {children}
+            </div>
+        </div>
+    )
+}
+
 export default function PageLayout({title, children}: PageLayoutProps) {
     return (
         <div className="flex h-screen">

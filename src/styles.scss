@@ -7,11 +7,20 @@
 @layer components {
 
     body {
-        @pply font-sans;
+        font-family: "Open Sans", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        font-variation-settings:
+        "wdth" 100;
     }
 
     h1 {
-        @apply text-4xl text-primary-950 font-semibold;
+        @apply font-semibold text-4xl text-primary-900 font-semibold;
+    }
+
+    h5 {
+        @apply py-5 font-medium text-xl;
     }
 
     .list-group-item {
@@ -19,11 +28,11 @@
     }
 
     .btn {
-        @apply p-2 rounded-lg transition duration-300;
+        @apply font-medium rounded pt-1 pb-2 px-4 transition duration-300;
     }
 
     .btn-primary {
-        @apply bg-primary-900 text-white hover:bg-primary-950 disabled:bg-primary-100;
+        @apply bg-primary-800 text-white hover:bg-primary-950 disabled:bg-primary-100;
     }
 
     .btn-secondary {
