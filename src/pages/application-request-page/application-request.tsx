@@ -1,10 +1,13 @@
-import styles from './application-request.module.scss';
+import { Input } from '../../lib/component/form-inputs-component/form-inputs';
+import { CenterPageLayout } from '../../lib/component/page-layout-component/page-layout';
 
 export function ApplicationRequest() {
   return (
-    <div className={styles['container']}>
-      <h1>Welcome to ApplicationRequest!</h1>
-    </div>
+    <CenterPageLayout title='Welcome to $Dataspace'>
+      <form>
+        <Input id='email' label='Email address' name='email'/>
+      </form>
+    </CenterPageLayout>
   );
 }
 
