@@ -2,9 +2,9 @@ import PageLayout from "../page-layout-component/page-layout";
 
 export default function Loading() {
     return (
-        <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
-        </div>
+        <span className="material-symbols-outlined animate-spin text-4xl text-primary-900">
+          progress_activity
+        </span>
     )
 }
 
