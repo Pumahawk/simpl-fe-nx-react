@@ -16,7 +16,7 @@ export function ApplicationRequest() {
   ]
   return (
     <CenterPageLayout title='Welcome to $Dataspace'>
-      <form className='bg-red-300'>
+      <form>
         <Input id='email' label='Email address' name='email'/>
         <Input id='org' label='Organizzation name' name='org'/>
         <Select id='participantType' label='Participant type' name='participantType' options={participantTypeOptions}/>
