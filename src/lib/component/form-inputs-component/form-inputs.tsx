@@ -25,11 +25,13 @@ export interface InputProps {
   invalidMessage?: string;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(({label, id, name, input, type="text", invalidMessage}: InputProps, ref) =>  {
+export function Input({label, id, name, input, type="text", invalidMessage}: InputProps){
   const inputRef = useRef<HTMLInputElement>(null);
-  useImperativeHandle(ref, () => {
-    return inputRef.current as HTMLInputElement;
-  }, [])
+  useEffect(() => {
+    if(input?.ref && inputRef.current) {
+      (input.ref as unknown as React.MutableRefObject<HTMLInputElement>).current = inputRef.current;
+    }
+  }, [input?.ref])
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.setCustomValidity(invalidMessage || "");
@@ -37,10 +39,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({label, id, name,
   }, [invalidMessage]);
   return (
     <InputLayout label={label} id={id} invalidMessage={invalidMessage}>
-      { className => <input ref={ref} className={className} type={type} id={id} name={name} {...input}></input>}
+      { className => <input ref={inputRef} className={className} type={type} id={id} name={name} {...input}></input>}
     </InputLayout>
   );
-});
+}
 
 export interface SelectProps {
   id: string;
