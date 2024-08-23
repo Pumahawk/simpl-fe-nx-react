@@ -1,21 +1,12 @@
-import { FormEvent, useReducer, useState } from 'react';
+import { FormEvent, useCallback, useReducer, useState } from 'react';
 import { Input, Select } from '../../lib/component/form-inputs-component/form-inputs';
 import { CenterPageLayout } from '../../lib/component/page-layout-component/page-layout';
 
 
-interface FormValues {
-  pwd1: string;
-  pwd2: string;
-}
 export function ApplicationRequest() {
-  const [formValues, setFormValues] = useState<FormValues>({
-    pwd1: "",
-    pwd2: "",
-  })
-  const updatePassword = adp(pwd1 => setFormValues(v => ({...v, ...{pwd1}})));
-  const updateRepeatePassword = adp(pwd2 => setFormValues(v => ({...v, ...{pwd2}})))
+  const [pwd, setPwd] = useState("");
 
-  const validPasswordMessage = formValues.pwd1 === formValues.pwd2 ? "" : "Two passwords are different";
+  const passwordValidator = useCallback((pwd1: string) => pwd === pwd1 ? "" : "Two passwords are different", [pwd]);
 
   const participantTypeOptions = [
     {
@@ -38,8 +29,8 @@ export function ApplicationRequest() {
         <Input id='surname' label='Surname' name='surname'/>
         <Input id='name' label='Name' name='name'/>
         <Input id='username' label='Username' name='username'/>
-        <Input id='password' label='Password' name='password' input={{value: formValues.pwd1, onChange: updatePassword}}/>
-        <Input id='confirmPassword' label='Confirm Password' name='confirmPassword' invalidMessage={validPasswordMessage} input={{value: formValues.pwd2, onChange: updateRepeatePassword}}/>
+        <Input id='password' label='Password' name='password' input={{onChange: adp(setPwd)}}/>
+        <Input id='confirmPassword' label='Confirm Password' name='confirmPassword' validator={passwordValidator}/>
         <button className='mt-6 mb-3 btn btn-primary' type="button">Create credentials</button>
       </form>
     </CenterPageLayout>
