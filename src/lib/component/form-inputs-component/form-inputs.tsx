@@ -1,4 +1,4 @@
-import React, { HTMLProps, useRef, useState } from 'react';
+import React, { forwardRef, HTMLProps, useEffect, useImperativeHandle, useRef } from 'react';
 
 export interface InputLayoutProps {
   id: string;
@@ -22,29 +22,25 @@ export interface InputProps {
   name: string;
   type?: string;
   input?: HTMLProps<HTMLInputElement>;
-  validate?: (value: string) => string | null | undefined;
+  invalidMessage?: string;
 }
-export function Input({label, id, name, input, type="text", validate}: InputProps) {
+
+export const Input = forwardRef<HTMLInputElement, InputProps>(({label, id, name, input, type="text", invalidMessage}: InputProps, ref) =>  {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [invalidMessage, setInvalidMessage] = useState<string | null | undefined>(null);
-  function handleOnChange(value: string) {
-    if (validate && inputRef.current) {
-      const message = validate(value);
-      if (message) {
-        inputRef.current.setCustomValidity(message);
-        setInvalidMessage(message);
-      } else {
-        setInvalidMessage(null);
-        inputRef.current.setCustomValidity("");
-      }
+  useImperativeHandle(ref, () => {
+    return inputRef.current as HTMLInputElement;
+  }, [])
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.setCustomValidity(invalidMessage || "");
     }
-  }
+  }, [invalidMessage]);
   return (
     <InputLayout label={label} id={id} invalidMessage={invalidMessage}>
-      { className => <input ref={inputRef} onChange={e => handleOnChange(e.target.value)} className={className} type={type} id={id} name={name} {...input}></input>}
+      { className => <input ref={ref} className={className} type={type} id={id} name={name} {...input}></input>}
     </InputLayout>
   );
-}
+});
 
 export interface SelectProps {
   id: string;
