@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useReducer, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Input, Select } from '../../lib/component/form-inputs-component/form-inputs';
 import { CenterPageLayout } from '../../lib/component/page-layout-component/page-layout';
 
@@ -7,6 +7,7 @@ export function ApplicationRequest() {
   const [pwd, setPwd] = useState("");
 
   const passwordValidator = useCallback((pwd1: string) => pwd === pwd1 ? "" : "Two passwords are different", [pwd]);
+  const emailValidator = useCallback((email: string) => email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/) ? "" : "Invalid email", []);
 
   const participantTypeOptions = [
     {
@@ -23,7 +24,7 @@ export function ApplicationRequest() {
   return (
     <CenterPageLayout title='Welcome to $Dataspace'>
       <form>
-        <Input id='email' label='Email address' name='email'/>
+        <Input id='email' label='Email address' name='email' validator={emailValidator}/>
         <Input id='org' label='Organizzation name' name='org'/>
         <Select id='participantType' label='Participant type' name='participantType' options={participantTypeOptions}/>
         <Input id='surname' label='Surname' name='surname'/>
